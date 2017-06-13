@@ -9,6 +9,11 @@ module EventSourceryTodoApp
       status 422
     end
 
+    error BadRequest do |error|
+      body "Bad Request: #{error.message}"
+      status 400
+    end
+
     post '/todo/:todo_id' do
       command = Commands::Todo::Add::Command.new(params)
       command.valid?

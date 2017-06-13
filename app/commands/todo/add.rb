@@ -13,6 +13,12 @@ module EventSourceryTodoApp
           end
 
           def valid?
+            raise BadRequest, 'title is blank' if payload[:title].nil?
+            begin
+              Date.parse(payload[:due_date]) if payload[:due_date]
+            rescue ArgumentError
+              raise BadRequest, 'due_date is invalid'
+            end
           end
         end
 
