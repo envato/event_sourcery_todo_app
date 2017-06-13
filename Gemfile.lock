@@ -3,6 +3,7 @@ GEM
   remote: https://rubygems.envato.com/
   specs:
     coderay (1.1.1)
+    database_cleaner (1.6.1)
     diff-lcs (1.3)
     event_sourcery (0.12.0)
     event_sourcery-postgres (0.2.0)
@@ -48,6 +49,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  database_cleaner
   event_sourcery!
   event_sourcery-postgres!
   pg (= 0.20.0)
