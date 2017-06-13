@@ -22,6 +22,18 @@ app
     └── server.rb
 ```
 
+## Routes
+
+```
+GET /todos/current
+GET /todos/completed
+GET /todos/scheduled
+POST /todo/:id (add)
+PUT /todo/:id (amend)
+POST /todo/:id/complete
+POST /todo/:id/abandon
+```
+
 ## Events
 
 - TodoAdded
