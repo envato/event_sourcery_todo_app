@@ -4,6 +4,11 @@ require 'app/commands/todo/add'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
+    error UnprocessableEntity do |error|
+      body "Unprocessable Entity: #{error.message}"
+      status 422
+    end
+
     post '/todo/:todo_id' do
       command = Commands::Todo::Add::Command.new(params)
       command.valid?

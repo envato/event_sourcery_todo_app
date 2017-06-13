@@ -20,5 +20,18 @@ RSpec.describe 'add todo', type: :request do
         'stakeholder_email' => 'the-governator@example.com',
       )
     end
+
+    context 'when the Todo already exists' do
+      before do
+        post "/todo/#{todo_id}"
+      end
+
+      it 'returns unprocessable entity' do
+        post "/todo/#{todo_id}"
+
+        expect(last_response.status).to be 422
+        expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" already exists}
+      end
+    end
   end
 end
