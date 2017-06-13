@@ -12,9 +12,14 @@ RSpec.describe 'outstanding todos', type: :request do
         }),
         TodoAdded.new(aggregate_id: todo_id_2, body: {
           title: "If it's hard to remember, it will be difficult to forget",
+          due_date: '2017-06-13',
         }),
         TodoCompleted.new(aggregate_id: todo_id_1, body: {
           completed_on: '2017-06-13',
+        }),
+        TodoAmended.new(aggregate_id: todo_id_2, body: {
+          title: "If it's hard to remember, it...",
+          description: "Hmm...",
         }),
         TodoAdded.new(aggregate_id: todo_id_3, body: {
           title: 'Milk is for babies',
@@ -36,9 +41,9 @@ RSpec.describe 'outstanding todos', type: :request do
       expect(JSON.parse(last_response.body, symbolize_names: true)).to eq([
         {
           todo_id: todo_id_2,
-          title: "If it's hard to remember, it will be difficult to forget",
-          description: nil,
-          due_date: nil,
+          title: "If it's hard to remember, it...",
+          description: "Hmm...",
+          due_date: '2017-06-13 00:00:00 UTC',
           stakeholder_email: nil,
         },
         {
