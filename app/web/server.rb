@@ -4,6 +4,7 @@ require 'app/commands/todo/abandon'
 require 'app/commands/todo/add'
 require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
+require 'app/projections/completed_todos/query'
 require 'app/projections/outstanding/query'
 
 module EventSourceryTodoApp
@@ -49,6 +50,13 @@ module EventSourceryTodoApp
     get '/todos/outstanding' do
       body JSON.pretty_generate(
         EventSourceryTodoApp::Projections::Outstanding::Query.handle
+      )
+      status 200
+    end
+
+    get '/todos/completed' do
+      body JSON.pretty_generate(
+        EventSourceryTodoApp::Projections::CompletedTodos::Query.handle
       )
       status 200
     end
