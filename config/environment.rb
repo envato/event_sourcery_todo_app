@@ -32,6 +32,10 @@ module EventSourceryTodoApp
   def self.event_sink
     EventSourcery::Postgres.config.event_sink
   end
+
+  def self.projections_database
+    EventSourcery::Postgres.config.projections_database
+  end
 end
 
 EventSourceryTodoApp.configure do |config|

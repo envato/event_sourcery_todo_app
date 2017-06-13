@@ -1,0 +1,47 @@
+require 'app/projections/outstanding/projector'
+
+RSpec.describe 'outstanding todos', type: :request do
+  describe 'GET /todos/outstanding' do
+    let(:todo_id_1) { SecureRandom.uuid }
+    let(:todo_id_2) { SecureRandom.uuid }
+    let(:events) do
+      [
+        TodoAdded.new(aggregate_id: todo_id_1, body: {
+          title: "If it's hard to remember, it will be difficult to forget",
+        }),
+        TodoAdded.new(aggregate_id: todo_id_2, body: {
+          title: 'Milk is for babies',
+        }),
+      ]
+    end
+    let(:projector) { EventSourceryTodoApp::Projections::Outstanding::Projector.new }
+
+    it 'returns a list of outstanding Todos' do
+      projector.setup
+
+      events.each do |event|
+        projector.process(event)
+      end
+
+      get '/todos/outstanding'
+
+      expect(last_response.status).to be 200
+      expect(JSON.parse(last_response.body, symbolize_names: true)).to eq([
+        {
+          todo_id: todo_id_1,
+          title: "If it's hard to remember, it will be difficult to forget",
+          description: nil,
+          due_date: nil,
+          stakeholder_email: nil,
+        },
+        {
+          todo_id: todo_id_2,
+          title: 'Milk is for babies',
+          description: nil,
+          due_date: nil,
+          stakeholder_email: nil,
+        },
+      ])
+    end
+  end
+end

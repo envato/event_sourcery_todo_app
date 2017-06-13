@@ -1,6 +1,7 @@
 require 'sinatra'
 
 require 'app/commands/todo/add'
+require 'app/projections/outstanding/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
@@ -19,6 +20,13 @@ module EventSourceryTodoApp
       command.valid?
       Commands::Todo::Add::CommandHandler.handle(command)
       status 201
+    end
+
+    get '/todos/outstanding' do
+      body JSON.pretty_generate(
+        EventSourceryTodoApp::Projections::Outstanding::Query.handle
+      )
+      status 200
     end
   end
 end

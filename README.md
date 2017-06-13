@@ -13,7 +13,7 @@ app
 │   ├── todo_amended.rb
 │   └── todo_completed.rb
 ├── projections
-│   └── current
+│   └── outstanding
 │       ├── projector.rb
 │       └── query.rb
 ├── reactors
@@ -25,7 +25,7 @@ app
 ## Routes
 
 ```
-GET /todos/current
+GET /todos/outstanding
 GET /todos/completed
 GET /todos/scheduled
 POST /todo/:id (add)
@@ -51,7 +51,7 @@ POST /todo/:id/abandon
 
 ## Projections
 
-- Current
+- Outstanding
 - Completed
 - Scheduled (has due date)
 
