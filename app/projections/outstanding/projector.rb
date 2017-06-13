@@ -23,6 +23,10 @@ module EventSourceryTodoApp
             stakeholder_email: event.body['stakeholder_email'],
           )
         end
+
+        project TodoCompleted do |event|
+          table.where(todo_id: event.aggregate_id).delete
+        end
       end
     end
   end
