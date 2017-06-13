@@ -8,7 +8,10 @@ app
 │   └── todo
 │       └── add.rb
 ├── events
-│   └── todo_added.rb
+│   ├── todo_abandoned.rb
+│   ├── todo_added.rb
+│   ├── todo_amended.rb
+│   └── todo_completed.rb
 ├── projections
 │   └── current
 │       ├── projector.rb
