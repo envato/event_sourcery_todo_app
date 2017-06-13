@@ -1,5 +1,24 @@
 # Event Sourcery Todo Example App
 
+```
+app
+├── aggregates
+│   └── todo.rb
+├── commands
+│   └── todo
+│       └── add.rb
+├── events
+│   └── todo_added.rb
+├── projections
+│   └── current
+│       ├── projector.rb
+│       └── query.rb
+├── reactors
+│   └── notifier.rb
+└── web
+    └── server.rb
+```
+
 ## Events
 
 - TodoAdded
@@ -17,7 +36,7 @@
 
 ## Projections
 
-- Current List
+- Current
 - Completed
 - Scheduled (has due date)
 
