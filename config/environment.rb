@@ -1,6 +1,8 @@
 require 'event_sourcery'
 require 'event_sourcery/postgres'
 
+require 'app/events/todo_added'
+
 module EventSourceryTodoApp
   class Config
     attr_accessor :database_url
@@ -16,6 +18,18 @@ module EventSourceryTodoApp
 
   def self.environment
     ENV.fetch('RACK_ENV', 'development')
+  end
+
+  def self.event_store
+    EventSourcery::Postgres.config.event_store
+  end
+
+  def self.event_source
+    EventSourcery::Postgres.config.event_store
+  end
+
+  def self.event_sink
+    EventSourcery::Postgres.config.event_sink
   end
 end
 

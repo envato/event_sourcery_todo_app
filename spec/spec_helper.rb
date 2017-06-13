@@ -1,8 +1,11 @@
+ENV['RACK_ENV'] = 'test'
+
 require 'rack/test'
 require 'securerandom'
 
 $LOAD_PATH << '.'
 
+require 'config/environment'
 require 'app/web/server'
 require 'spec/support/request_helpers'
 
@@ -22,4 +25,8 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
   config.order = :random
   Kernel.srand config.seed
+
+  EventSourcery.configure do |config|
+    config.logger = Logger.new(nil)
+  end
 end
