@@ -3,7 +3,7 @@ module EventSourceryTodoApp
     module Outstanding
       class Query
         def self.handle
-          EventSourceryTodoApp.projections_database[:outstanding].all
+          EventSourceryTodoApp.projections_database[:query_outstanding_todos].all
         end
       end
     end

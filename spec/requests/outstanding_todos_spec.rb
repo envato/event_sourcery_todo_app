@@ -1,4 +1,4 @@
-require 'app/projections/outstanding/projector'
+require 'app/projections/outstanding_todos/projector'
 
 RSpec.describe 'outstanding todos', type: :request do
   describe 'GET /todos/outstanding' do
@@ -33,7 +33,7 @@ RSpec.describe 'outstanding todos', type: :request do
         }),
       ]
     end
-    let(:projector) { EventSourceryTodoApp::Projections::Outstanding::Projector.new }
+    let(:projector) { EventSourceryTodoApp::Projections::OutstandingTodos::Projector.new }
 
     it 'returns a list of outstanding Todos' do
       projector.setup

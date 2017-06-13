@@ -1,12 +1,12 @@
 module EventSourceryTodoApp
   module Projections
-    module Outstanding
+    module OutstandingTodos
       class Projector
         include EventSourcery::Postgres::Projector
 
-        projector_name :outstanding
+        projector_name :outstanding_todos
 
-        table :outstanding do
+        table :query_outstanding_todos do
           column :todo_id, 'UUID NOT NULL'
           column :title, :text
           column :description, :text

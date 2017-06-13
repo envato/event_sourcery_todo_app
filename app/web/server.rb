@@ -5,7 +5,7 @@ require 'app/commands/todo/add'
 require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
 require 'app/projections/completed_todos/query'
-require 'app/projections/outstanding/query'
+require 'app/projections/outstanding_todos/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
