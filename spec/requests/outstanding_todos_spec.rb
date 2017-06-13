@@ -5,6 +5,7 @@ RSpec.describe 'outstanding todos', type: :request do
     let(:todo_id_1) { SecureRandom.uuid }
     let(:todo_id_2) { SecureRandom.uuid }
     let(:todo_id_3) { SecureRandom.uuid }
+    let(:todo_id_4) { SecureRandom.uuid }
     let(:events) do
       [
         TodoAdded.new(aggregate_id: todo_id_1, body: {
@@ -23,6 +24,12 @@ RSpec.describe 'outstanding todos', type: :request do
         }),
         TodoAdded.new(aggregate_id: todo_id_3, body: {
           title: 'Milk is for babies',
+        }),
+        TodoAdded.new(aggregate_id: todo_id_4, body: {
+          title: 'Your clothes, give them to me, now!',
+        }),
+        TodoAbandoned.new(aggregate_id: todo_id_4, body: {
+          abandoned_on: '2017-06-01',
         }),
       ]
     end

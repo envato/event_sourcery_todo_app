@@ -32,7 +32,7 @@ module EventSourceryTodoApp
           )
         end
 
-        project TodoCompleted do |event|
+        project TodoCompleted, TodoAbandoned do |event|
           table.where(todo_id: event.aggregate_id).delete
         end
 
