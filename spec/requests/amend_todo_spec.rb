@@ -57,5 +57,19 @@ RSpec.describe 'amend todo', type: :request do
         expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" is complete}
       end
     end
+
+    context 'when the Todo is already abandoned' do
+      before do
+        EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_sink.sink TodoAbandoned.new(aggregate_id: todo_id)
+      end
+
+      it 'returns unprocessable entity' do
+        put "/todo/#{todo_id}"
+
+        expect(last_response.status).to be 422
+        expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" is abandoned}
+      end
+    end
   end
 end

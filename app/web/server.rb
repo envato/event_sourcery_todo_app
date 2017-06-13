@@ -1,5 +1,6 @@
 require 'sinatra'
 
+require 'app/commands/todo/abandon'
 require 'app/commands/todo/add'
 require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
@@ -35,6 +36,13 @@ module EventSourceryTodoApp
       command = Commands::Todo::Complete::Command.new(params)
       command.valid?
       Commands::Todo::Complete::CommandHandler.handle(command)
+      status 200
+    end
+
+    post '/todo/:todo_id/abandon' do
+      command = Commands::Todo::Abandon::Command.new(params)
+      command.valid?
+      Commands::Todo::Abandon::CommandHandler.handle(command)
       status 200
     end
 
