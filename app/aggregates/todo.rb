@@ -7,6 +7,9 @@ module EventSourceryTodoApp
         @added = true
       end
 
+      apply TodoAmended do |event|
+      end
+
       apply TodoCompleted do |event|
         @completed = true
       end
@@ -15,6 +18,16 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added
 
         apply_event(TodoAdded,
+          aggregate_id: id,
+          body: payload,
+        )
+      end
+
+      def amend(payload)
+        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added
+        raise UnprocessableEntity, "Todo #{id.inspect} is complete" if completed
+
+        apply_event(TodoAmended,
           aggregate_id: id,
           body: payload,
         )
