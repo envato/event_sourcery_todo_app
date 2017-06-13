@@ -1,6 +1,7 @@
 require 'sinatra'
 
 require 'app/commands/todo/add'
+require 'app/commands/todo/complete'
 require 'app/projections/outstanding/query'
 
 module EventSourceryTodoApp
@@ -20,6 +21,13 @@ module EventSourceryTodoApp
       command.valid?
       Commands::Todo::Add::CommandHandler.handle(command)
       status 201
+    end
+
+    post '/todo/:todo_id/complete' do
+      command = Commands::Todo::Complete::Command.new(params)
+      command.valid?
+      Commands::Todo::Complete::CommandHandler.handle(command)
+      status 200
     end
 
     get '/todos/outstanding' do

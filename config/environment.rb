@@ -2,6 +2,7 @@ require 'event_sourcery'
 require 'event_sourcery/postgres'
 
 require 'app/events/todo_added'
+require 'app/events/todo_completed'
 require 'app/errors'
 
 module EventSourceryTodoApp
