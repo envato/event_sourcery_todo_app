@@ -37,7 +37,7 @@ module EventSourceryTodoApp
           table(:query_completed_todos_incomplete_todos).where(
             todo_id: event.aggregate_id,
           ).update(
-            slice(event.body, 'title', 'description', 'due_date', 'stakeholder_email')
+            event.body.slice('title', 'description', 'due_date', 'stakeholder_email')
           )
         end
 
@@ -58,12 +58,6 @@ module EventSourceryTodoApp
           )
 
           table(:query_completed_todos_incomplete_todos).where(todo_id: event.aggregate_id).delete
-        end
-
-        private
-
-        def slice(hash, *keys)
-          hash.select { |k, v| keys.include?(k) }
         end
       end
     end

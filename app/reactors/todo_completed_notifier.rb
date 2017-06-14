@@ -32,7 +32,7 @@ module EventSourceryTodoApp
 
       process TodoAmended do |event|
         table.where(todo_id: event.aggregate_id).update(
-          slice(event.body, 'title', 'stakeholder_email'),
+          event.body.slice('title', 'stakeholder_email'),
         )
       end
 
@@ -58,12 +58,6 @@ module EventSourceryTodoApp
         end
 
         table.where(todo_id: event.aggregate_id).delete
-      end
-
-      private
-
-      def slice(hash, *keys)
-        hash.select { |k, v| keys.include?(k) }
       end
     end
   end
