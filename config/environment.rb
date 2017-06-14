@@ -1,6 +1,7 @@
 require 'event_sourcery'
 require 'event_sourcery/postgres'
 
+require 'app/utils'
 require 'app/events/todo_abandoned'
 require 'app/events/todo_added'
 require 'app/events/todo_amended'
