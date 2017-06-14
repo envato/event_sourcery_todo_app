@@ -5,7 +5,7 @@ require 'app/events/todo_abandoned'
 require 'app/events/todo_added'
 require 'app/events/todo_amended'
 require 'app/events/todo_completed'
-require 'app/events/todo_stakeholder_notified_of_completion'
+require 'app/events/stakeholder_notified_of_todo_completion'
 require 'app/errors'
 
 module EventSourceryTodoApp

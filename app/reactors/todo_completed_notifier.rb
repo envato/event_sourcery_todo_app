@@ -6,7 +6,7 @@ module EventSourceryTodoApp
       include EventSourcery::Postgres::Reactor
 
       processor_name :todo_completed_notifier
-      emits_events :todo_stakeholder_notified_of_completion
+      emits_events :stakeholder_notified_of_todo_completion
 
       table :reactor_todo_completed_notifier do
         column :todo_id, 'UUID NOT NULL'
@@ -43,7 +43,7 @@ module EventSourceryTodoApp
         )
 
         emit_event(
-          TodoStakeholderNotifiedOfCompletion.new(
+          StakeholderNotifiedOfTodoCompletion.new(
             aggregate_id: event.aggregate_id,
             body: { notified_on: Date.today }
           )
@@ -56,6 +56,9 @@ module EventSourceryTodoApp
 
       def slice(hash, *keys)
         hash.select { |k, v| keys.include?(k) }
+      end
+
+      def send_email(email:, message:)
       end
     end
   end

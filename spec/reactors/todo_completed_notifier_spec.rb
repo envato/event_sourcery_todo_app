@@ -100,10 +100,10 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
         )
       end
 
-      it 'emits a TodoStakeholderNotifiedOfCompletion event' do
+      it 'emits a StakeholderNotifiedOfTodoCompletion event' do
         emitted_event = EventSourceryTodoApp.event_source.get_next_from(1).first
 
-        expect(emitted_event).to be_a(TodoStakeholderNotifiedOfCompletion)
+        expect(emitted_event).to be_a(StakeholderNotifiedOfTodoCompletion)
         expect(emitted_event.body.to_h).to include('notified_on' => '2017-06-13')
       end
 
