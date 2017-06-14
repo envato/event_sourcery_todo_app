@@ -13,12 +13,13 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
     subject(:process) { stream.each { |event| reactor.process(event) } }
 
     let(:todo_id) { SecureRandom.uuid }
+    let(:current_date) { DateTime.parse('2017-06-13 00:00:00 +10:00') }
     let(:stream) { [] }
 
     before do
       reactor.setup
       allow(described_class::SendEmail).to receive(:call)
-      allow(Date).to receive(:today).and_return(Date.parse('2017-06-13'))
+      allow(DateTime).to receive(:now).and_return(current_date)
       process
     end
 
@@ -105,7 +106,7 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
           emitted_event = EventSourceryTodoApp.event_source.get_next_from(1).first
 
           expect(emitted_event).to be_a(StakeholderNotifiedOfTodoCompletion)
-          expect(emitted_event.body.to_h).to include('notified_on' => '2017-06-13')
+          expect(emitted_event.body.to_h).to include('notified_on' => '2017-06-12T14:00:00+00:00')
         end
 
         it 'deletes the row from the reactor table' do

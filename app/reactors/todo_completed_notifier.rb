@@ -52,7 +52,7 @@ module EventSourceryTodoApp
           emit_event(
             StakeholderNotifiedOfTodoCompletion.new(
               aggregate_id: event.aggregate_id,
-              body: { notified_on: Date.today }
+              body: { notified_on: DateTime.now.new_offset(0) }
             )
           )
         end
