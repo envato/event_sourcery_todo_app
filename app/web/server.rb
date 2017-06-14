@@ -10,6 +10,9 @@ require 'app/projections/outstanding_todos/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
+    # Ensure our error handlers are triggerred in development
+    set :show_exceptions, :after_handler
+
     error UnprocessableEntity do |error|
       body "Unprocessable Entity: #{error.message}"
       status 422
