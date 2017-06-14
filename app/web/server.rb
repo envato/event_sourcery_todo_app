@@ -10,7 +10,7 @@ require 'app/projections/outstanding_todos/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
-    # Ensure our error handlers are triggerred in development
+    # Ensure our error handlers are triggered in development
     set :show_exceptions, :after_handler
 
     error UnprocessableEntity do |error|
@@ -28,7 +28,7 @@ module EventSourceryTodoApp
     end
 
     def json_params
-      # Cooerce this into a symbolised Hash so Sintra data structures don't leak into
+      # Coerce this into a symbolised Hash so Sintra data structures don't leak into
       # the command layer
       Hash[
         params.merge(
