@@ -5,7 +5,7 @@ RSpec.describe 'complete todo', type: :request do
     it 'returns success' do
       EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
 
-      post "/todo/#{todo_id}/complete", {
+      post_json "/todo/#{todo_id}/complete", {
         completed_on: '2017-07-13',
       }
 
@@ -19,7 +19,7 @@ RSpec.describe 'complete todo', type: :request do
 
     context 'when the Todo does not exist' do
       it 'returns unprocessable entity' do
-        post "/todo/#{todo_id}/complete", {
+        post_json "/todo/#{todo_id}/complete", {
           completed_on: '2017-07-13',
         }
 
@@ -32,13 +32,13 @@ RSpec.describe 'complete todo', type: :request do
       before do
         EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
 
-        post "/todo/#{todo_id}/complete", {
+        post_json "/todo/#{todo_id}/complete", {
           completed_on: '2017-07-13',
         }
       end
 
       it 'returns unprocessable entity' do
-        post "/todo/#{todo_id}/complete", {
+        post_json "/todo/#{todo_id}/complete", {
           completed_on: '2017-07-14',
         }
 
@@ -54,7 +54,7 @@ RSpec.describe 'complete todo', type: :request do
       end
 
       it 'returns unprocessable entity' do
-        post "/todo/#{todo_id}/complete", {
+        post_json "/todo/#{todo_id}/complete", {
           completed_on: '2017-07-14',
         }
 
@@ -67,7 +67,7 @@ RSpec.describe 'complete todo', type: :request do
       it 'returns bad request entity' do
         EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
 
-        post "/todo/#{todo_id}/complete"
+        post_json "/todo/#{todo_id}/complete"
 
         expect(last_response.status).to be 400
         expect(last_response.body).to eq 'Bad Request: completed_on is blank'
@@ -78,7 +78,7 @@ RSpec.describe 'complete todo', type: :request do
       it 'returns bad request entity' do
         EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
 
-        post "/todo/#{todo_id}/complete", {
+        post_json "/todo/#{todo_id}/complete", {
           completed_on: 'invalid',
         }
 

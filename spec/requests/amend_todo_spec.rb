@@ -13,7 +13,7 @@ RSpec.describe 'amend todo', type: :request do
       end
 
       it 'returns success' do
-        put "/todo/#{todo_id}", {
+        put_json "/todo/#{todo_id}", {
           description: 'It IS leg day!',
         }
 
@@ -28,7 +28,7 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'with an invalid date' do
       it 'returns bad request' do
-        put "/todo/#{todo_id}", due_date: 'invalid'
+        put_json "/todo/#{todo_id}", due_date: 'invalid'
 
         expect(last_response.status).to be 400
         expect(last_response.body).to eq 'Bad Request: due_date is invalid'
@@ -37,7 +37,7 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when the Todo does not exist' do
       it 'returns unprocessable entity' do
-        put "/todo/#{todo_id}"
+        put_json "/todo/#{todo_id}"
 
         expect(last_response.status).to be 422
         expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" does not exist}
@@ -51,7 +51,7 @@ RSpec.describe 'amend todo', type: :request do
       end
 
       it 'returns unprocessable entity' do
-        put "/todo/#{todo_id}"
+        put_json "/todo/#{todo_id}"
 
         expect(last_response.status).to be 422
         expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" is complete}
@@ -65,7 +65,7 @@ RSpec.describe 'amend todo', type: :request do
       end
 
       it 'returns unprocessable entity' do
-        put "/todo/#{todo_id}"
+        put_json "/todo/#{todo_id}"
 
         expect(last_response.status).to be 422
         expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" is abandoned}

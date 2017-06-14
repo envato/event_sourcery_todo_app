@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+#/ Usage: add [options]
+#/ Add a todo item by posting to the Todo web API.
+#/    -t, --title title                     Set todo title
+#/    -d, --description description         Set todo description
+#/    -D, --due         due_date            Set todo due date
+#/    -s, --stakeholder stakeholder_email   Set who to notify when todo is completed
+#/    -h, --help                            Show help
+
+require 'optparse'
+require 'optparse/date'
+require 'securerandom'
+require 'net/http'
+require 'uri'
+require 'json'
+
+title = 'My new task'
+description = nil
+due_date = nil
+stakeholder_email = nil
+todo_id = SecureRandom.uuid
+
+ARGV.options do |opts|
+  opts.on('-t', '--title title', String) { |ti| title = ti }
+  opts.on('-d', '--description description', String) { |desc| description = desc }
+  opts.on('-D', '--due due_date', Date) { |due| due_date = due }
+  opts.on('-s', '--stakeholder stakeholder_email', String) { |email| stakeholder_email = email }
+  opts.on_tail('-h', '--help') { exec "grep ^#/<'#{__FILE__}'|cut -c4-" }
+
+  opts.parse!
+end
+
+payload = {
+  title: title,
+  description: description,
+  due_date: due_date,
+  stakeholder_email: stakeholder_email,
+}.compact
+
+puts "Adding todo: #{payload}"
+uri = URI.parse("http://localhost:3000/todo/#{todo_id}")
+http = Net::HTTP.new(uri.host, uri.port)
+request = Net::HTTP::Post.new(uri.path, 'Content-Type': 'text/json')
+request.body = payload.to_json
+
+response = http.request(request)
+
+if response.code != '201'
+  $stderr.puts 'Failed to add todo'
+  $stderr.puts response.body
+  exit 1
+end

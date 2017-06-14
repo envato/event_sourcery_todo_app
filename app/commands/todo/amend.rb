@@ -29,7 +29,7 @@ module EventSourceryTodoApp
             )
 
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
-            aggregate.amend(command.payload)
+            aggregate.amend(command.payload.slice(:title, :description, :due_date, :stakeholder_email))
             repository.save(aggregate)
           end
         end

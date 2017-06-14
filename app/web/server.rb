@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'json'
 
 require 'app/commands/todo/abandon'
 require 'app/commands/todo/add'
@@ -9,6 +10,9 @@ require 'app/projections/outstanding_todos/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
+    # Ensure our error handlers are triggered in development
+    set :show_exceptions, :after_handler
+
     error UnprocessableEntity do |error|
       body "Unprocessable Entity: #{error.message}"
       status 422
@@ -19,29 +23,43 @@ module EventSourceryTodoApp
       status 400
     end
 
+    before do
+      content_type :json
+    end
+
+    def json_params
+      # Coerce this into a symbolised Hash so Sintra data structures don't leak into
+      # the command layer
+      Hash[
+        params.merge(
+          JSON.parse(request.body.read)
+        ).map{ |k, v| [k.to_sym, v] }
+      ]
+    end
+
     post '/todo/:todo_id' do
-      command = Commands::Todo::Add::Command.new(params)
+      command = Commands::Todo::Add::Command.new(json_params)
       command.valid?
       Commands::Todo::Add::CommandHandler.handle(command)
       status 201
     end
 
     put '/todo/:todo_id' do
-      command = Commands::Todo::Amend::Command.new(params)
+      command = Commands::Todo::Amend::Command.new(json_params)
       command.valid?
       Commands::Todo::Amend::CommandHandler.handle(command)
       status 200
     end
 
     post '/todo/:todo_id/complete' do
-      command = Commands::Todo::Complete::Command.new(params)
+      command = Commands::Todo::Complete::Command.new(json_params)
       command.valid?
       Commands::Todo::Complete::CommandHandler.handle(command)
       status 200
     end
 
     post '/todo/:todo_id/abandon' do
-      command = Commands::Todo::Abandon::Command.new(params)
+      command = Commands::Todo::Abandon::Command.new(json_params)
       command.valid?
       Commands::Todo::Abandon::CommandHandler.handle(command)
       status 200

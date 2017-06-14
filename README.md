@@ -10,6 +10,20 @@ Then run the setup script.
 $ ./scripts/setup
 ```
 
+## Using the Application
+
+Start the web app and processors.
+
+```sh
+$ foreman start
+```
+
+Then you can add a todo using the bundled scripts.
+
+```sh
+$ ./scripts/cli/add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
+```
+
 ## Application Structure
 
 ```

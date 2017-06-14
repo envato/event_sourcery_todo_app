@@ -4,6 +4,31 @@ task :environment do
   require 'config/environment'
 end
 
+desc 'Run Event Stream Processors'
+task run_processors: :environment do
+  puts "Starting Event Stream processors"
+
+  event_source = EventSourceryTodoApp.event_source
+  tracker = EventSourceryTodoApp.tracker
+  db_connection = EventSourceryTodoApp.projections_database
+
+  processors = [
+    EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Projections::OutstandingTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    )
+  ]
+
+  EventSourcery::EventProcessing::ESPRunner.new(
+    event_processors: processors,
+    event_source: event_source,
+  ).start!
+end
+
 namespace :db do
   desc 'Create database'
   task create: :environment do

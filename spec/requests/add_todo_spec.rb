@@ -3,7 +3,7 @@ RSpec.describe 'add todo', type: :request do
     let(:todo_id) { SecureRandom.uuid }
 
     it 'returns success' do
-      post "/todo/#{todo_id}", {
+      post_json "/todo/#{todo_id}", {
         title: '2000 squats',
         description: 'Leg day.',
         due_date: '2017-07-13',
@@ -23,11 +23,11 @@ RSpec.describe 'add todo', type: :request do
 
     context 'when the Todo already exists' do
       before do
-        post "/todo/#{todo_id}", title: 'Bicep curls for days'
+        post_json "/todo/#{todo_id}", title: 'Bicep curls for days'
       end
 
       it 'returns unprocessable entity' do
-        post "/todo/#{todo_id}", title: 'Get to the chopper!'
+        post_json "/todo/#{todo_id}", title: 'Get to the chopper!'
 
         expect(last_response.status).to be 422
         expect(last_response.body).to eq %Q{Unprocessable Entity: Todo "#{todo_id}" already exists}
@@ -36,7 +36,7 @@ RSpec.describe 'add todo', type: :request do
 
     context 'with a missing title' do
       it 'returns bad request' do
-        post "/todo/#{todo_id}"
+        post_json "/todo/#{todo_id}"
 
         expect(last_response.status).to be 400
         expect(last_response.body).to eq 'Bad Request: title is blank'
@@ -45,7 +45,7 @@ RSpec.describe 'add todo', type: :request do
 
     context 'with an invalid date' do
       it 'returns bad request' do
-        post "/todo/#{todo_id}", title: "It's not a tumor", due_date: 'invalid'
+        post_json "/todo/#{todo_id}", title: "It's not a tumor", due_date: 'invalid'
 
         expect(last_response.status).to be 400
         expect(last_response.body).to eq 'Bad Request: due_date is invalid'
