@@ -35,7 +35,7 @@ payload = {
   description: description,
   due_date: due_date,
   stakeholder_email: stakeholder_email,
-}.compact
+}.select { |_, value| !value.nil? }
 
 puts "Adding todo [#{todo_id}]: #{payload}"
 uri = URI.parse("http://localhost:3000/todo/#{todo_id}")

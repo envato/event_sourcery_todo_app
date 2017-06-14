@@ -30,7 +30,7 @@ end
 
 payload = {
   abandoned_on: abandoned_on,
-}.compact
+}.select { |_, value| !value.nil? }
 
 puts "Abandoning todo [#{todo_id}]: #{payload}"
 uri = URI.parse("http://localhost:3000/todo/#{todo_id}/abandon")
