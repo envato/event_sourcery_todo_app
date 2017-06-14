@@ -7,6 +7,7 @@ require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
 require 'app/projections/completed_todos/query'
 require 'app/projections/outstanding_todos/query'
+require 'app/projections/scheduled_todos/query'
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
@@ -68,6 +69,13 @@ module EventSourceryTodoApp
     get '/todos/outstanding' do
       body JSON.pretty_generate(
         EventSourceryTodoApp::Projections::Outstanding::Query.handle
+      )
+      status 200
+    end
+
+    get '/todos/scheduled' do
+      body JSON.pretty_generate(
+        EventSourceryTodoApp::Projections::Scheduled::Query.handle
       )
       status 200
     end
