@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#/ Usage: add <title>
+#/ Usage: add [options]
 #/ Add a todo item by posting to the Todo web API.
 #/    -t, --title title                     Set todo title
 #/    -d, --description description         Set todo description
@@ -25,7 +25,7 @@ ARGV.options do |opts|
   opts.on('-d', '--description description', String) { |desc| description = desc }
   opts.on('-D', '--due due_date', Date) { |due| due_date = due }
   opts.on('-s', '--stakeholder stakeholder_email', String) { |email| stakeholder_email = email }
-  opts.on_tail("-h", "--help") { exec "grep ^#/<'#{__FILE__}'|cut -c4-" }
+  opts.on_tail('-h', '--help') { exec "grep ^#/<'#{__FILE__}'|cut -c4-" }
 
   opts.parse!
 end
@@ -45,8 +45,8 @@ request.body = payload.to_json
 
 response = http.request(request)
 
-if response.code != "201"
-  $stderr.puts "Failed to add todo"
+if response.code != '201'
+  $stderr.puts 'Failed to add todo'
   $stderr.puts response.body
   exit 1
 end

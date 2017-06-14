@@ -21,7 +21,7 @@ $ foreman start
 Then you can add a todo using the bundled scripts.
 
 ```sh
-$ ./scripts/add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
+$ ./scripts/cli/add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
 ```
 
 ## Application Structure
