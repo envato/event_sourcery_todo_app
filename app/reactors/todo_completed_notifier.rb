@@ -1,9 +1,9 @@
-require 'app/services/send_email'
-
 module EventSourceryTodoApp
   module Reactors
     class TodoCompletedNotifier
       include EventSourcery::Postgres::Reactor
+
+      SendEmail = -> { }
 
       processor_name :todo_completed_notifier
       emits_events :stakeholder_notified_of_todo_completion
@@ -37,7 +37,7 @@ module EventSourceryTodoApp
       process TodoCompleted do |event|
         todo = table.where(todo_id: event.aggregate_id).first
 
-        Services::SendEmail.perform(
+        SendEmail.call(
           email: todo[:stakeholder_email],
           message: "Your todo item #{todo[:title]} has been completed!",
         )
@@ -56,9 +56,6 @@ module EventSourceryTodoApp
 
       def slice(hash, *keys)
         hash.select { |k, v| keys.include?(k) }
-      end
-
-      def send_email(email:, message:)
       end
     end
   end

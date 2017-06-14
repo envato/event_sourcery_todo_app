@@ -17,7 +17,7 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
 
     before do
       reactor.setup
-      allow(EventSourceryTodoApp::Services::SendEmail).to receive(:perform)
+      allow(described_class::SendEmail).to receive(:call)
       allow(Date).to receive(:today).and_return(Date.parse('2017-06-13'))
       process
     end
@@ -94,7 +94,7 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
       }
 
       it 'sends an email' do
-        expect(EventSourceryTodoApp::Services::SendEmail).to have_received(:perform).with(
+        expect(described_class::SendEmail).to have_received(:call).with(
           email: 'the-governator@example.com',
           message: 'Your todo item You are terminated! has been completed!',
         )
