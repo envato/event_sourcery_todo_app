@@ -37,17 +37,19 @@ module EventSourceryTodoApp
       process TodoCompleted do |event|
         todo = table.where(todo_id: event.aggregate_id).first
 
-        SendEmail.call(
-          email: todo[:stakeholder_email],
-          message: "Your todo item #{todo[:title]} has been completed!",
-        )
-
-        emit_event(
-          StakeholderNotifiedOfTodoCompletion.new(
-            aggregate_id: event.aggregate_id,
-            body: { notified_on: Date.today }
+        unless todo[:stakeholder_email].to_s == ''
+          SendEmail.call(
+            email: todo[:stakeholder_email],
+            message: "Your todo item #{todo[:title]} has been completed!",
           )
-        )
+
+          emit_event(
+            StakeholderNotifiedOfTodoCompletion.new(
+              aggregate_id: event.aggregate_id,
+              body: { notified_on: Date.today }
+            )
+          )
+        end
 
         table.where(todo_id: event.aggregate_id).delete
       end

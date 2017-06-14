@@ -83,33 +83,60 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
     end
 
     context 'when a todo is completed' do
-      let(:stream) {
-        [
-          TodoAdded.new(aggregate_id: todo_id, body: {
-            title: 'You are terminated!',
-            stakeholder_email: 'the-governator@example.com',
-          }),
-          TodoCompleted.new(aggregate_id: todo_id),
-        ]
-      }
+      context 'when the todo has a stakeholder' do
+        let(:stream) {
+          [
+            TodoAdded.new(aggregate_id: todo_id, body: {
+              title: 'You are terminated!',
+              stakeholder_email: 'the-governator@example.com',
+            }),
+            TodoCompleted.new(aggregate_id: todo_id),
+          ]
+        }
 
-      it 'sends an email' do
-        expect(described_class::SendEmail).to have_received(:call).with(
-          email: 'the-governator@example.com',
-          message: 'Your todo item You are terminated! has been completed!',
-        )
+        it 'sends an email' do
+          expect(described_class::SendEmail).to have_received(:call).with(
+            email: 'the-governator@example.com',
+            message: 'Your todo item You are terminated! has been completed!',
+          )
+        end
+
+        it 'emits a StakeholderNotifiedOfTodoCompletion event' do
+          emitted_event = EventSourceryTodoApp.event_source.get_next_from(1).first
+
+          expect(emitted_event).to be_a(StakeholderNotifiedOfTodoCompletion)
+          expect(emitted_event.body.to_h).to include('notified_on' => '2017-06-13')
+        end
+
+        it 'deletes the row from the reactor table' do
+          row = EventSourceryTodoApp.projections_database[:reactor_todo_completed_notifier].first
+          expect(row).to be_nil
+        end
       end
 
-      it 'emits a StakeholderNotifiedOfTodoCompletion event' do
-        emitted_event = EventSourceryTodoApp.event_source.get_next_from(1).first
+      context 'when the todo has a stakeholder' do
+        let(:stream) {
+          [
+            TodoAdded.new(aggregate_id: todo_id, body: {
+              title: 'You are terminated!',
+            }),
+            TodoCompleted.new(aggregate_id: todo_id),
+          ]
+        }
 
-        expect(emitted_event).to be_a(StakeholderNotifiedOfTodoCompletion)
-        expect(emitted_event.body.to_h).to include('notified_on' => '2017-06-13')
-      end
+        it 'does not send an email' do
+          expect(described_class::SendEmail).to_not have_received(:call)
+        end
 
-      it 'deletes the row from the reactor table' do
-        row = EventSourceryTodoApp.projections_database[:reactor_todo_completed_notifier].first
-        expect(row).to be_nil
+        it 'does not emit a StakeholderNotifiedOfTodoCompletion event' do
+          emitted_event = EventSourceryTodoApp.event_source.get_next_from(1).first
+          expect(emitted_event).to_not be_a(StakeholderNotifiedOfTodoCompletion)
+        end
+
+        it 'deletes the row from the reactor table' do
+          row = EventSourceryTodoApp.projections_database[:reactor_todo_completed_notifier].first
+          expect(row).to be_nil
+        end
       end
     end
   end
