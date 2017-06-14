@@ -8,7 +8,7 @@ module EventSourceryTodoApp
           attr_reader :payload, :aggregate_id
 
           def initialize(params)
-            @payload = params
+            @payload = params.slice(:todo_id, :completed_on)
             @aggregate_id = payload.delete(:todo_id)
           end
 
@@ -30,7 +30,7 @@ module EventSourceryTodoApp
             )
 
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
-            aggregate.complete(command.payload.slice(:title, :description, :due_date, :stakeholder_email, :completed_on))
+            aggregate.complete(command.payload)
             repository.save(aggregate)
           end
         end
