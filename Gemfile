@@ -12,7 +12,7 @@ gem 'sinatra'
 gem 'pg', '0.20.0'
 
 group :development, :test do
-  gem 'pry'
+  gem 'pry-byebug'
   gem 'rspec'
   gem 'rack-test'
   gem 'database_cleaner'

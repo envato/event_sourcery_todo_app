@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://rubygems.envato.com/
   specs:
+    byebug (9.0.6)
     coderay (1.1.1)
     database_cleaner (1.6.1)
     diff-lcs (1.3)
@@ -17,6 +18,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.2)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
@@ -55,7 +59,7 @@ DEPENDENCIES
   event_sourcery!
   event_sourcery-postgres!
   pg (= 0.20.0)
-  pry
+  pry-byebug
   rack-test
   rake
   rspec
