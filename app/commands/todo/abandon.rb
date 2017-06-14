@@ -24,10 +24,7 @@ module EventSourceryTodoApp
 
         class CommandHandler
           def self.handle(command)
-            repository = EventSourcery::Repository.new(
-              event_source: EventSourceryTodoApp.event_source,
-              event_sink: EventSourceryTodoApp.event_sink,
-            )
+            repository = EventSourceryTodoApp.repository
 
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
             aggregate.abandon(command.payload.slice(:title, :description, :due_date, :stakeholder_email, :abandoned_on))
