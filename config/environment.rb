@@ -49,7 +49,7 @@ module EventSourceryTodoApp
   end
 
   def self.repository
-    EventSourcery::Repository.new(
+    @repository ||= EventSourcery::Repository.new(
       event_source: event_source,
       event_sink: event_sink
     )
