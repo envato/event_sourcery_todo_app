@@ -18,7 +18,6 @@ title = 'My new task'
 description = nil
 due_date = nil
 stakeholder_email = nil
-todo_id = nil
 
 ARGV.options do |opts|
   opts.on('-t', '--title title', String) { |ti| title = ti }
