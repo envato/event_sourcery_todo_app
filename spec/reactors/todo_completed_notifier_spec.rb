@@ -114,7 +114,7 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
         end
       end
 
-      context 'when the todo has a stakeholder' do
+      context 'when the todo does not have a stakeholder' do
         let(:stream) {
           [
             TodoAdded.new(aggregate_id: todo_id, body: {
