@@ -3,7 +3,13 @@ module EventSourceryTodoApp
     class TodoCompletedNotifier
       include EventSourcery::Postgres::Reactor
 
-      SendEmail = -> { }
+      SendEmail = ->(params) do
+        puts <<~EMAIL
+          -- Email Sent
+          To: #{params[:email]}
+          Message: #{params[:message]}
+        EMAIL
+      end
 
       processor_name :todo_completed_notifier
       emits_events :stakeholder_notified_of_todo_completion
