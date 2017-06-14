@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-#/ Usage: add [options]
-#/ Add a todo item via the Todo web API.
+#/ Usage: amend [options] <todo_id>
+#/ Amend a todo item via the Todo web API.
 #/    -t, --title title                     Set todo title
 #/    -d, --description description         Set todo description
 #/    -D, --due         due_date            Set todo due date
@@ -18,7 +18,6 @@ title = 'My new task'
 description = nil
 due_date = nil
 stakeholder_email = nil
-todo_id = SecureRandom.uuid
 
 ARGV.options do |opts|
   opts.on('-t', '--title title', String) { |ti| title = ti }
@@ -30,6 +29,13 @@ ARGV.options do |opts|
   opts.parse!
 end
 
+todo_id = ARGV[0]
+
+unless todo_id
+  $stderr.puts "Error: you must specify a todo_id to amend"
+  exit 1
+end
+
 payload = {
   title: title,
   description: description,
@@ -37,16 +43,16 @@ payload = {
   stakeholder_email: stakeholder_email,
 }.select { |_, value| !value.nil? }
 
-puts "Adding todo [#{todo_id}]: #{payload}"
+puts "Amending todo [#{todo_id}]: #{payload}"
 uri = URI.parse("http://localhost:3000/todo/#{todo_id}")
 http = Net::HTTP.new(uri.host, uri.port)
-request = Net::HTTP::Post.new(uri.path, 'Content-Type': 'application/json')
+request = Net::HTTP::Put.new(uri.path, 'Content-Type': 'application/json')
 request.body = payload.to_json
 
 response = http.request(request)
 
-if response.code != '201'
-  $stderr.puts 'Failed to add todo'
+if response.code != '200'
+  $stderr.puts 'Failed to amend todo'
   $stderr.puts response.body
   exit 1
 end
