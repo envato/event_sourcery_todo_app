@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
 
 if ! type -t "foreman" > /dev/null; then
   echo
@@ -15,7 +15,8 @@ echo
 bundle install
 
 echo
-echo "--- Creating and migrating database"
+echo "--- Creating and migrating databases"
 echo
 
 bundle exec rake db:create db:migrate
+RACK_ENV=test bundle exec rake db:create db:migrate
