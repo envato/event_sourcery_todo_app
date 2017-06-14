@@ -1,5 +1,17 @@
 # Event Sourcery Todo Example App
 
+## Get started
+
+Ensure you have Postgres and Ruby 2.2 or higher installed.
+
+Then run the setup script.
+
+```sh
+$ ./scripts/setup
+```
+
+## Application Structure
+
 ```
 app
 ├── aggregates
