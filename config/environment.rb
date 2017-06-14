@@ -7,6 +7,8 @@ require 'app/events/todo_amended'
 require 'app/events/todo_completed'
 require 'app/events/stakeholder_notified_of_todo_completion'
 require 'app/errors'
+require 'app/projections/completed_todos/projector'
+require 'app/projections/outstanding_todos/projector'
 
 module EventSourceryTodoApp
   class Config
@@ -31,6 +33,10 @@ module EventSourceryTodoApp
 
   def self.event_source
     EventSourcery::Postgres.config.event_store
+  end
+
+  def self.tracker
+    EventSourcery::Postgres.config.event_tracker
   end
 
   def self.event_sink
