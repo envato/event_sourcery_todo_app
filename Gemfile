@@ -17,5 +17,6 @@ group :development, :test do
   gem 'rack-test'
   gem 'database_cleaner'
   gem 'shotgun'
+  gem 'commander'
   gem 'better_errors'
 end

@@ -18,25 +18,25 @@ Start the web app and processors.
 $ foreman start
 ```
 
-Then you can manage your todos using cli scripts.
+Then you can manage your Todos using `request` CLI script.
 
 ```sh
 # Add a todo
-$ ./scripts/cli/add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
+$ ./scripts/request add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
 
 # Amend
-$ ./scripts/cli/amend -t "Get to the chopper, NOW!" aac35923-39b4-4c39-ad5d-f79d67bb2fb2
+$ ./scripts/request amend -t "Get to the chopper, NOW!" -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2
 
 # Complete
-$ ./scripts/cli/complete aac35923-39b4-4c39-ad5d-f79d67bb2fb2
+$ ./scripts/request complete -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-01
 
 # Abandon
-$ ./scripts/cli/abandon 7fd9683b-0f59-4082-9808-ffd962981c79
+$ ./scripts/request abandon -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-01
 
 # List
-./scripts/cli/list outstanding
-./scripts/cli/list scheduled
-./scripts/cli/list completed
+./scripts/request list -l outstanding
+./scripts/request list -l scheduled
+./scripts/request list -l completed
 ```
 
 ## Application Structure
