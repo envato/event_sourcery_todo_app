@@ -60,7 +60,7 @@ end
 
 EventSourceryTodoApp.configure do |config|
   postgres_port = ENV['BOXEN_POSTGRESQL_PORT'] || 5432
-  config.database_url = "postgres://127.0.0.1:#{postgres_port}/event_sourcery_todo_app_#{EventSourceryTodoApp.environment}"
+  config.database_url = ENV['DATABASE_URL'] || "postgres://127.0.0.1:#{postgres_port}/event_sourcery_todo_app_#{EventSourceryTodoApp.environment}"
 end
 
 EventSourcery::Postgres.configure do |config|
