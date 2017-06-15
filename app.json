@@ -9,5 +9,8 @@
     "processors": {
       "quantity": 1
     }
+  },
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate"
   }
 }
