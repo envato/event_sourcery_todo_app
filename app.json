@@ -1,5 +1,13 @@
 {
   "name": "Event Sourcery Todo App",
   "description": "An example Todo List app using Event Sourcery",
-  "keywords": ["ruby", "event_sourcery", "cqrs", "todo", "sample"]
+  "keywords": ["ruby", "event_sourcery", "cqrs", "todo", "sample"],
+  "formation": {
+    "web": {
+      "quantity": 1
+    },
+    "processors": {
+      "quantity": 1
+    }
+  }
 }
