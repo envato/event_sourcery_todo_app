@@ -8,6 +8,8 @@ GEM
       rack (>= 0.9.0)
     byebug (9.0.6)
     coderay (1.1.1)
+    commander (4.4.3)
+      highline (~> 1.7.2)
     database_cleaner (1.6.1)
     diff-lcs (1.3)
     erubis (2.7.0)
@@ -16,6 +18,7 @@ GEM
       event_sourcery (>= 0.10.0)
       pg
       sequel (~> 4.38)
+    highline (1.7.8)
     method_source (0.8.2)
     mustermann (1.0.0)
     pg (0.20.0)
@@ -61,6 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   better_errors
+  commander
   database_cleaner
   event_sourcery!
   event_sourcery-postgres!

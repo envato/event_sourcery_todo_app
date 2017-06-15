@@ -1,0 +1,153 @@
+#!/usr/bin/env ruby
+
+require 'securerandom'
+require 'uri'
+require 'net/http'
+require 'json'
+require 'commander/import'
+
+class Request
+  def self.call(*args)
+    new(*args).call
+  end
+
+  def initialize(method, path, payload = {})
+    @method = method
+    @path = path
+    @payload = payload
+  end
+
+  def call
+    response = Net::HTTP.new(uri.host, uri.port).request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      puts response.body
+      puts 'Success.'
+    else
+      $stderr.puts
+      $stderr.puts 'Error:'
+      $stderr.puts "  #{response.body}"
+      exit 1
+    end
+  end
+
+  private
+
+  attr_reader :method, :path, :payload
+
+  def uri
+    @uri ||= URI.parse("http://localhost:3000#{path}")
+  end
+
+  def request
+    case method
+    when :post
+      Net::HTTP::Post.new(uri.path, 'Content-Type': 'application/json').tap { |r| r.body = payload.to_json }
+    when :put
+      Net::HTTP::Put.new(uri.path, 'Content-Type': 'application/json').tap { |r| r.body = payload.to_json }
+    when :get
+      Net::HTTP::Get.new(uri.path, 'Content-Type': 'application/json')
+    end
+  end
+end
+
+def slice_and_compact(hash, *keys)
+  hash.select { |key, value| keys.include?(key) && !value.nil? }
+end
+
+program :name, 'Todo'
+program :version, '0.0.1'
+program :description, 'Interact with the Event Sourcery Todo Example App.'
+
+never_trace!
+
+script_name = $0
+
+command :add do |c|
+  c.syntax = 'Todo add [options]'
+  c.summary = 'Add a Todo item via the Todo web API'
+  c.example 'Add a Todo', %Q{#{script_name} add -t "My task"}
+  c.example 'Add a more complex Todo', %Q{#{script_name} add -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
+  c.option '-t TITLE', '--title TITLE', 'Title'
+  c.option '-d DESCRIPTION', '--description DESCRIPTION', 'Description'
+  c.option '-D DUE_DATE', '--due_date DUE_DATE', 'Due date'
+  c.option '-s STAKEHOLDER_EMAIL', '--stakeholder_email STAKEHOLDER_EMAIL', 'Stakeholder email'
+  c.action do |args, options|
+    todo_id = SecureRandom.uuid
+    payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
+    puts "Adding todo [#{todo_id}]: #{payload}"
+    Request.call(:post, "/todo/#{todo_id}", payload)
+  end
+end
+
+command :amend do |c|
+  c.syntax = 'Todo amend [options]'
+  c.summary = 'Amend a Todo item via the Todo web API'
+  c.example 'Amend the title of a Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task"}
+  c.option '-i ID', '--id ID', 'Existing Todo ID'
+  c.option '-t TITLE', '--title TITLE', 'Title'
+  c.option '-d DESCRIPTION', '--description DESCRIPTION', 'Description'
+  c.option '-D DUE_DATE', '--due_date DUE_DATE', 'Due date'
+  c.option '-s STAKEHOLDER_EMAIL', '--stakeholder_email STAKEHOLDER_EMAIL', 'Stakeholder email'
+  c.action do |args, options|
+    todo_id = options.id
+    unless todo_id
+      $stderr.puts "Error: you must specify a Todo ID to amend"
+      exit 1
+    end
+    payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
+    puts "Amending todo [#{todo_id}]: #{payload}"
+    Request.call(:put, "/todo/#{todo_id}", payload)
+  end
+end
+
+command :abandon do |c|
+  c.syntax = 'Todo abandon [options]'
+  c.summary = 'Abandon a Todo item via the Todo web API'
+  c.example 'Abandon a Todo', %Q{#{script_name} abandon -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -a 2017-01-01}
+  c.option '-i ID', '--id ID', 'Existing Todo ID'
+  c.option '-D ABANDONED_ON', '--abandoned_on ABANDONED_ON', 'Abandoned on'
+  c.action do |args, options|
+    todo_id = options.id
+    payload = slice_and_compact(options.default, :abandoned_on)
+    puts "Abandoning todo [#{todo_id}]: #{payload}"
+    Request.call(:post, "/todo/#{todo_id}/abandon", payload)
+  end
+end
+
+command :complete do |c|
+  c.syntax = 'Todo complete [options]'
+  c.summary = 'Complete a Todo item via the Todo web API'
+  c.example 'Complete a Todo', %Q{#{script_name} complete -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -a 2017-01-01}
+  c.option '-i ID', '--id ID', 'Existing Todo ID'
+  c.option '-D COMPLETED_ON', '--completed_on COMPLETED_ON', 'Completed on'
+  c.action do |args, options|
+    todo_id = options.id
+    payload = slice_and_compact(options.default, :completed_on)
+    puts "Completing todo [#{todo_id}]: #{payload}"
+    Request.call(:post, "/todo/#{todo_id}/complete", payload)
+  end
+end
+
+command :list do |c|
+  LISTS = [
+    'outstanding',
+    'scheduled',
+    'completed',
+  ]
+
+  c.syntax = 'Todo list [options]'
+  c.summary = 'List Todos via the Todo web API'
+  c.example 'List outstanding Todos', %Q{#{script_name} list -l outstanding}
+  c.option '-l LIST', '--list', "List to display: #{LISTS.join(', ')}"
+  c.action do |args, options|
+    list = options.list.to_s.downcase
+    unless LISTS.include?(list)
+      $stderr.puts "Error: you must specify which Todos to list: #{LISTS.join(', ')}"
+      exit 1
+    end
+
+    puts "#{list.capitalize} todos"
+    Request.call(:get, "/todos/#{list}")
+  end
+end
