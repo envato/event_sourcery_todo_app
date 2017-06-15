@@ -68,6 +68,7 @@ command :add do |c|
   c.summary = 'Add a Todo item via the Todo web API'
   c.example 'Add a Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task"}
   c.example 'Add a more complex Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
+  c.example 'Add a Todo', %Q{#{script_name} add -i $(#{script_name} uuid) -t "My task"}
   c.option '-i ID', '--id ID', 'Todo ID'
   c.option '-t TITLE', '--title TITLE', 'Title'
   c.option '-d DESCRIPTION', '--description DESCRIPTION', 'Description'
@@ -155,5 +156,14 @@ command :list do |c|
 
     puts "#{list.capitalize} todos"
     Request.call(:get, "/todos/#{list}")
+  end
+end
+
+command :uuid do |c|
+  c.syntax = 'Todo uuid'
+  c.summary = 'Generate a UUID'
+  c.example 'Generate a UUID', "#{script_name} uuid"
+  c.action do |args, options|
+    puts SecureRandom.uuid
   end
 end
