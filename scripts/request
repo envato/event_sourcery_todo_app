@@ -11,9 +11,9 @@ class Request
     new(*args).call
   end
 
-  def initialize(method, url, payload = {})
+  def initialize(method, path, payload = {})
     @method = method
-    @url = url
+    @path = path
     @payload = payload
   end
 
@@ -33,10 +33,10 @@ class Request
 
   private
 
-  attr_reader :method, :url, :payload
+  attr_reader :method, :path, :payload
 
   def uri
-    @uri ||= URI.parse(url)
+    @uri ||= URI.parse("http://localhost:3000#{path}")
   end
 
   def request
@@ -76,7 +76,7 @@ command :add do |c|
     todo_id = SecureRandom.uuid
     payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
     puts "Adding todo [#{todo_id}]: #{payload}"
-    Request.call(:post, "http://localhost:3000/todo/#{todo_id}", payload)
+    Request.call(:post, "/todo/#{todo_id}", payload)
   end
 end
 
@@ -97,7 +97,7 @@ command :amend do |c|
     end
     payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
     puts "Amending todo [#{todo_id}]: #{payload}"
-    Request.call(:put, "http://localhost:3000/todo/#{todo_id}", payload)
+    Request.call(:put, "/todo/#{todo_id}", payload)
   end
 end
 
@@ -111,7 +111,7 @@ command :abandon do |c|
     todo_id = options.id
     payload = slice_and_compact(options.default, :abandoned_on)
     puts "Abandoning todo [#{todo_id}]: #{payload}"
-    Request.call(:post, "http://localhost:3000/todo/#{todo_id}/abandon", payload)
+    Request.call(:post, "/todo/#{todo_id}/abandon", payload)
   end
 end
 
@@ -125,7 +125,7 @@ command :complete do |c|
     todo_id = options.id
     payload = slice_and_compact(options.default, :completed_on)
     puts "Completing todo [#{todo_id}]: #{payload}"
-    Request.call(:post, "http://localhost:3000/todo/#{todo_id}/complete", payload)
+    Request.call(:post, "/todo/#{todo_id}/complete", payload)
   end
 end
 
@@ -148,6 +148,6 @@ command :list do |c|
     end
 
     puts "#{list.capitalize} todos"
-    Request.call(:get, "http://localhost:3000/todos/#{list}")
+    Request.call(:get, "/todos/#{list}")
   end
 end
