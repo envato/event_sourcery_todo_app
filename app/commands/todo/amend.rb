@@ -7,6 +7,10 @@ module EventSourceryTodoApp
         class Command
           attr_reader :payload, :aggregate_id
 
+          def self.build(**args)
+            new(**args).tap(&:validate)
+          end
+
           def initialize(params)
             @payload = params.slice(
               :todo_id,
@@ -18,7 +22,8 @@ module EventSourceryTodoApp
             @aggregate_id = payload.delete(:todo_id)
           end
 
-          def valid?
+          def validate
+            raise BadRequest, 'todo_id is blank' if aggregate_id.nil?
             begin
               Date.parse(payload[:due_date]) if payload[:due_date]
             rescue ArgumentError
