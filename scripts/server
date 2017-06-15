@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ $RACK_ENV == production ]; then
+  bundle exec rackup -p $PORT
+else
+  bundle exec shotgun -p 3000
+fi

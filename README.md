@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/envato/event_sourcery_todo_app.svg?branch=master)](https://travis-ci.org/envato/event_sourcery_todo_app)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Get started
 
 Ensure you have Postgres and Ruby 2.2 or higher installed.
