@@ -46,28 +46,24 @@ module EventSourceryTodoApp
 
     post '/todo/:todo_id' do
       command = Commands::Todo::Add::Command.new(json_params)
-      command.validate
       Commands::Todo::Add::CommandHandler.new.handle(command)
       status 201
     end
 
     put '/todo/:todo_id' do
       command = Commands::Todo::Amend::Command.new(json_params)
-      command.validate
       Commands::Todo::Amend::CommandHandler.new.handle(command)
       status 200
     end
 
     post '/todo/:todo_id/complete' do
       command = Commands::Todo::Complete::Command.new(json_params)
-      command.validate
       Commands::Todo::Complete::CommandHandler.new.handle(command)
       status 200
     end
 
     post '/todo/:todo_id/abandon' do
       command = Commands::Todo::Abandon::Command.new(json_params)
-      command.validate
       Commands::Todo::Abandon::CommandHandler.new.handle(command)
       status 200
     end

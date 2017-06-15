@@ -34,6 +34,8 @@ module EventSourceryTodoApp
           end
 
           def handle(command)
+            command.validate
+
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
             aggregate.add(command.payload)
             repository.save(aggregate)
