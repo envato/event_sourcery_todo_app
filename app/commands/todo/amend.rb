@@ -18,7 +18,7 @@ module EventSourceryTodoApp
             @aggregate_id = payload.delete(:todo_id)
           end
 
-          def valid?
+          def validate
             begin
               Date.parse(payload[:due_date]) if payload[:due_date]
             rescue ArgumentError

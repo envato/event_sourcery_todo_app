@@ -12,7 +12,7 @@ module EventSourceryTodoApp
             @aggregate_id = payload.delete(:todo_id)
           end
 
-          def valid?
+          def validate
             raise BadRequest, 'abandoned_on is blank' if payload[:abandoned_on].nil?
             begin
               Date.parse(payload[:abandoned_on]) if payload[:abandoned_on]
