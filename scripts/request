@@ -42,15 +42,11 @@ class Request
   def request
     case method
     when :post
-      req = Net::HTTP::Post.new(uri.path, 'Content-Type': 'application/json')
-      req.body = payload.to_json
-      req
+      Net::HTTP::Post.new(uri.path, 'Content-Type': 'application/json').tap { |r| r.body = payload.to_json }
     when :put
-      req = Net::HTTP::Put.new(uri.path, 'Content-Type': 'application/json')
-      req.body = payload.to_json
-      req
+      Net::HTTP::Put.new(uri.path, 'Content-Type': 'application/json').tap { |r| r.body = payload.to_json }
     when :get
-      req = Net::HTTP::Get.new(uri.path, 'Content-Type': 'application/json')
+      Net::HTTP::Get.new(uri.path, 'Content-Type': 'application/json')
     end
   end
 end
