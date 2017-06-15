@@ -22,7 +22,7 @@ Then you can manage your Todos using `request` CLI script.
 
 ```sh
 # Add a todo
-$ ./scripts/request add -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
+$ ./scripts/request add -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -t "Get to the chopper" -d "It's in the trees" -s dillon@cia.gov -D 2017-01-01
 
 # Amend
 $ ./scripts/request amend -t "Get to the chopper, NOW!" -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2

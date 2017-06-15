@@ -66,14 +66,20 @@ script_name = $0
 command :add do |c|
   c.syntax = 'Todo add [options]'
   c.summary = 'Add a Todo item via the Todo web API'
-  c.example 'Add a Todo', %Q{#{script_name} add -t "My task"}
-  c.example 'Add a more complex Todo', %Q{#{script_name} add -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
+  c.example 'Add a Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task"}
+  c.example 'Add a more complex Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
+  c.option '-i ID', '--id ID', 'Todo ID'
   c.option '-t TITLE', '--title TITLE', 'Title'
   c.option '-d DESCRIPTION', '--description DESCRIPTION', 'Description'
   c.option '-D DUE_DATE', '--due_date DUE_DATE', 'Due date'
   c.option '-s STAKEHOLDER_EMAIL', '--stakeholder_email STAKEHOLDER_EMAIL', 'Stakeholder email'
   c.action do |args, options|
-    todo_id = SecureRandom.uuid
+    todo_id = options.id
+    unless todo_id
+      $stderr.puts "Error: you must specify a Todo ID for the new Todo"
+      $stderr.puts "You can generate one using `#{script_name} uuid`."
+      exit 1
+    end
     payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
     puts "Adding todo [#{todo_id}]: #{payload}"
     Request.call(:post, "/todo/#{todo_id}", payload)
