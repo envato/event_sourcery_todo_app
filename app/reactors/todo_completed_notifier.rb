@@ -12,7 +12,7 @@ module EventSourceryTodoApp
       end
 
       processor_name :todo_completed_notifier
-      emits_events :stakeholder_notified_of_todo_completion
+      emits_events StakeholderNotifiedOfTodoCompletion
 
       table :reactor_todo_completed_notifier do
         column :todo_id, 'UUID NOT NULL'
