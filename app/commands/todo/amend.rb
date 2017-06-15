@@ -28,13 +28,19 @@ module EventSourceryTodoApp
         end
 
         class CommandHandler
-          def self.handle(command)
-            repository = EventSourceryTodoApp.repository
+          def initialize(repository: EventSourceryTodoApp.repository)
+            @repository = repository
+          end
 
+          def handle(command)
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
             aggregate.amend(command.payload)
             repository.save(aggregate)
           end
+
+          private
+
+          attr_reader :repository
         end
       end
     end
