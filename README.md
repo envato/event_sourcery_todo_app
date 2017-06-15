@@ -46,25 +46,39 @@ $ ./scripts/request list -l completed
 ## Application Structure
 
 ```
-app
-├── aggregates
-│   └── todo.rb
-├── commands
-│   └── todo
-│       └── add.rb
-├── events
-│   ├── todo_abandoned.rb
-│   ├── todo_added.rb
-│   ├── todo_amended.rb
-│   └── todo_completed.rb
-├── projections
-│   └── outstanding
-│       ├── projector.rb
-│       └── query.rb
-├── reactors
-│   └── notifier.rb
-└── web
-    └── server.rb
+├── app
+│   ├── aggregates
+│   │   └── todo.rb
+│   ├── commands
+│   │   └── todo
+│   │       ├── abandon.rb
+│   │       ├── add.rb
+│   │       ├── amend.rb
+│   │       └── complete.rb
+│   ├── errors.rb
+│   ├── events
+│   │   ├── stakeholder_notified_of_todo_completion.rb
+│   │   ├── todo_abandoned.rb
+│   │   ├── todo_added.rb
+│   │   ├── todo_amended.rb
+│   │   └── todo_completed.rb
+│   ├── projections
+│   │   ├── completed_todos
+│   │   │   ├── projector.rb
+│   │   │   └── query.rb
+│   │   ├── outstanding_todos
+│   │   │   ├── projector.rb
+│   │   │   └── query.rb
+│   │   └── scheduled_todos
+│   │       ├── projector.rb
+│   │       └── query.rb
+│   ├── reactors
+│   │   └── todo_completed_notifier.rb
+│   ├── utils.rb
+│   └── web
+│       └── server.rb
+├── config
+│   └── environment.rb
 ```
 
 ## Routes
