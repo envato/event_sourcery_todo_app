@@ -92,7 +92,7 @@ command :amend do |c|
   c.action do |args, options|
     todo_id = options.id
     unless todo_id
-      $stderr.puts "Error: you must specify a todo_id to amend"
+      $stderr.puts "Error: you must specify a Todo ID to amend"
       exit 1
     end
     payload = slice_and_compact(options.default, :title, :description, :due_date, :stakeholder_email)
