@@ -1,9 +1,7 @@
 source 'https://rubygems.org'
 
-source 'https://rubygems.envato.com' do
-  gem 'event_sourcery'
-  gem 'event_sourcery-postgres'
-end
+gem 'event_sourcery', git: 'https://github.com/envato/event_sourcery.git'
+gem 'event_sourcery-postgres', git: 'https://github.com/envato/event_sourcery-postgres.git'
 
 gem 'rake'
 gem 'sinatra'
