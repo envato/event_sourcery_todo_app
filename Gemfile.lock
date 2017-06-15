@@ -2,10 +2,15 @@ GEM
   remote: https://rubygems.org/
   remote: https://rubygems.envato.com/
   specs:
+    better_errors (2.1.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
     byebug (9.0.6)
     coderay (1.1.1)
     database_cleaner (1.6.1)
     diff-lcs (1.3)
+    erubis (2.7.0)
     event_sourcery (0.12.0)
     event_sourcery-postgres (0.2.0)
       event_sourcery (>= 0.10.0)
@@ -55,6 +60,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
   database_cleaner
   event_sourcery!
   event_sourcery-postgres!
@@ -67,4 +73,4 @@ DEPENDENCIES
   sinatra
 
 BUNDLED WITH
-   1.15.0
+   1.15.1
