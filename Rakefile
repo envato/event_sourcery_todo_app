@@ -12,12 +12,26 @@ task run_processors: :environment do
   tracker = EventSourceryTodoApp.tracker
   db_connection = EventSourceryTodoApp.projections_database
 
+  # Need to disconnect before starting the processors
+  db_connection.disconnect
+
+  # Show our ESP logs in foreman immediately
+  $stdout.sync = true
+
   processors = [
     EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
       tracker: tracker,
       db_connection: db_connection,
     ),
     EventSourceryTodoApp::Projections::OutstandingTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Projections::ScheduledTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Reactors::TodoCompletedNotifier.new(
       tracker: tracker,
       db_connection: db_connection,
     )

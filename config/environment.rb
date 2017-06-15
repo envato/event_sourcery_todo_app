@@ -10,6 +10,8 @@ require 'app/events/stakeholder_notified_of_todo_completion'
 require 'app/errors'
 require 'app/projections/completed_todos/projector'
 require 'app/projections/outstanding_todos/projector'
+require 'app/projections/scheduled_todos/projector'
+require 'app/reactors/todo_completed_notifier'
 
 module EventSourceryTodoApp
   class Config
