@@ -1,0 +1,5 @@
+{
+  "name": "Event Sourcery Todo App",
+  "description": "An example Todo List app using Event Sourcery",
+  "keywords": ["ruby", "event_sourcery", "cqrs", "todo", "sample"]
+}
