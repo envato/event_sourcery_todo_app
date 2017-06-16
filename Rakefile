@@ -4,6 +4,12 @@ task :environment do
   require 'config/environment'
 end
 
+desc "Loads the project and starts Pry"
+task console: :environment do
+  require 'pry'
+  Pry.start
+end
+
 desc 'Run Event Stream Processors'
 task run_processors: :environment do
   puts "Starting Event Stream processors"
