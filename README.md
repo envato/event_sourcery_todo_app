@@ -38,9 +38,9 @@ $ ./scripts/request complete -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-
 $ ./scripts/request abandon -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-01
 
 # List
-./scripts/request list -l outstanding
-./scripts/request list -l scheduled
-./scripts/request list -l completed
+$ ./scripts/request list -l outstanding
+$ ./scripts/request list -l scheduled
+$ ./scripts/request list -l completed
 ```
 
 ## Application Structure
@@ -81,14 +81,15 @@ POST /todo/:id/abandon
 
 ## Events
 
-- TodoAdded
-- TodoCompleted
-- TodoAbandoned
-- TodoAmended
+- `TodoAdded`
+- `TodoCompleted`
+- `TodoAbandoned`
+- `TodoAmended`
+- `StakeholderNotifiedOfTodoCompletion`
 
 ## Aggregates
 
-- Todo
+- `Todo`
   - title
   - description
   - due_date
@@ -96,12 +97,12 @@ POST /todo/:id/abandon
 
 ## Projections
 
-- Outstanding
-- Completed
-- Scheduled (has due date)
+- `OutstandingTodos`
+- `CompletedTodos`
+- `ScheduledTodos` (has due date)
 
-## Reactor
+## Reactors
 
-- Notifier
+- `TodoCompletedNotifier`
   - "sends" email
-  - Emits StakeholderNotified event
+  - Emits `StakeholderNotifiedOfTodoCompletion` event
