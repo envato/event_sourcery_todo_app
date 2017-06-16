@@ -32,6 +32,9 @@ module EventSourceryTodoApp
             @repository = repository
           end
 
+          # Handle loads the aggregate state from the store using the repository,
+          # defers to the aggregate to execute the command, and saves off any newly
+          # raised events to the store.
           def handle(command)
             aggregate = repository.load(Aggregates::Todo, command.aggregate_id)
             aggregate.complete(command.payload)
