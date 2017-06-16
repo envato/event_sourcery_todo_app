@@ -7,10 +7,10 @@ module EventSourceryTodoApp
       # its internal state from events.
 
       apply TodoAdded do |event|
-        # We track our ID when we are added to we can ensure the same todo isn't
+        # We track the ID when a todo is added so we can ensure the same todo isn't
         # added twice.
         #
-        # We could save more attributes off the event in here if we needed them.
+        # We can save more attributes off the event in here as necessary.
         @aggregate_id = event.aggregate_id
       end
 

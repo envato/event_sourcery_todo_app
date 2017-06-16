@@ -6,7 +6,7 @@ module EventSourceryTodoApp
 
         projector_name :completed_todos
 
-        # Database tables that form the projection
+        # Database tables that form the projection.
 
         table :query_completed_todos do
           column :todo_id, 'UUID NOT NULL'
