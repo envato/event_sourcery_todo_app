@@ -13,6 +13,8 @@ require 'app/projections/outstanding_todos/projector'
 require 'app/projections/scheduled_todos/projector'
 require 'app/reactors/todo_completed_notifier'
 
+# Configure EventSourcer and our Postgres event store.
+
 module EventSourceryTodoApp
   class Config
     attr_accessor :database_url
