@@ -6,6 +6,8 @@ module EventSourceryTodoApp
 
         projector_name :scheduled_todos
 
+        # Database tables that form the projection.
+
         table :query_scheduled_todos do
           column :todo_id, 'UUID NOT NULL'
           column :title, :text
@@ -16,6 +18,9 @@ module EventSourceryTodoApp
           index :todo_id, unique: true
           index :due_date
         end
+
+        # Event handlers that update the projection in response to different events
+        # from the store.
 
         project TodoAdded do |event|
           table.insert(

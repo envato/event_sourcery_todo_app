@@ -4,6 +4,12 @@ task :environment do
   require 'config/environment'
 end
 
+desc "Loads the project and starts Pry"
+task console: :environment do
+  require 'pry'
+  Pry.start
+end
+
 desc 'Run Event Stream Processors'
 task run_processors: :environment do
   puts "Starting Event Stream processors"
@@ -12,10 +18,11 @@ task run_processors: :environment do
   tracker = EventSourceryTodoApp.tracker
   db_connection = EventSourceryTodoApp.projections_database
 
-  # Need to disconnect before starting the processors
+  # Need to disconnect before starting the processors so
+  # that the forked processes have their own connection / fork safety.
   db_connection.disconnect
 
-  # Show our ESP logs in foreman immediately
+  # Show our ESP logs immediately under Foreman
   $stdout.sync = true
 
   processors = [
@@ -37,6 +44,7 @@ task run_processors: :environment do
     )
   ]
 
+  # The ESPRunner will fork child processes for each of the ESPs passed to it.
   EventSourcery::EventProcessing::ESPRunner.new(
     event_processors: processors,
     event_source: event_source,

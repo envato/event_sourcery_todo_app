@@ -35,14 +35,16 @@ module EventSourceryTodoApp
     end
 
     def json_params
-      # Coerce this into a symbolised Hash so Sintra data structures don't leak into
-      # the command layer
+      # Coerce this into a symbolised Hash so Sintra data structures
+      # don't leak into the command layer.
       Hash[
         params.merge(
           JSON.parse(request.body.read)
         ).map{ |k, v| [k.to_sym, v] }
       ]
     end
+
+    # Commands
 
     post '/todo/:todo_id' do
       command = Commands::Todo::Add::Command.build(json_params)
@@ -67,6 +69,8 @@ module EventSourceryTodoApp
       Commands::Todo::Abandon::CommandHandler.new.handle(command)
       status 200
     end
+
+    # Queries
 
     get '/todos/outstanding' do
       body JSON.pretty_generate(
