@@ -6,7 +6,7 @@ module EventSourceryTodoApp
 
         projector_name :scheduled_todos
 
-        # Database tables that form the projections
+        # Database tables that form the projection
 
         table :query_scheduled_todos do
           column :todo_id, 'UUID NOT NULL'
