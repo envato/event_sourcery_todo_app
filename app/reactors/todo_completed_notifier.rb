@@ -14,6 +14,8 @@ module EventSourceryTodoApp
       processor_name :todo_completed_notifier
       emits_events StakeholderNotifiedOfTodoCompletion
 
+      # Reactors often need to persist state so they can track what work they need
+      # to do. Here we use a database table.
       table :reactor_todo_completed_notifier do
         column :todo_id, 'UUID NOT NULL'
         column :title, :text
@@ -21,6 +23,9 @@ module EventSourceryTodoApp
 
         index :todo_id, unique: true
       end
+
+      # Event handlers where we do our work. This can include updating internal,
+      # emitting events, and/or calling external systems.
 
       process TodoAdded do |event|
         table.insert(
@@ -43,6 +48,8 @@ module EventSourceryTodoApp
       process TodoCompleted do |event|
         todo = table.where(todo_id: event.aggregate_id).first
 
+        # Here we send an email to the stakeholder and record that fact using
+        # an event in the store.
         unless todo[:stakeholder_email].to_s == ''
           SendEmail.call(
             email: todo[:stakeholder_email],
