@@ -134,6 +134,48 @@ Reactors can be used to build [process managers or sagas](https://msdn.microsoft
   - "sends" an email notifying stakeholders of todo completion.
   - Emits `StakeholderNotifiedOfTodoCompletion` event to record this fact.
 
+## Data flow of an "Add Todo" Request
+
+Below we see the flow of data of an "add todo" request. Note that arrows indicate data flow.
+
+Note that stage 1 and 2 are not synchronous. This means EventSourcery applications need to embrace [eventual consistency](https://en.wikipedia.org/wiki/Eventual_consistency).
+
+Also note that we are only showing one projection below. The other projectors and reactors will also update their projections based on the TodoAdded event.
+
+```
+
+         1. Add Todo      │       2. Update Outstanding   │     3. Issue Outstanding
+                                    Todos Projection                Todos Query
+               │          │                               │
+               ▼                                                          ▲
+       ┌───────────────┐  │                               │               │
+       │Command Handler│                                                  │
+       └───────────────┘  │                               │          F. Handle
+               │                                                       Query
+     B. Call add todo on  │                               │               │
+          aggregate                                                       │
+               │          │                               │               │
+               ▼                       ┌─────────────┐                    │
+        ┌─────────────┐   │            │ Outstanding │    │        ┌─────────────┐
+        │             │       ┌───────▶│    Todos    │             │             │
+     ┌─▶│  Aggregate  │   │   │        │  Projector  │    │        │Query Handler│
+     │  │             │       │        └─────────────┘             │             │
+     │  └─────────────┘   │  D. Read          │           │        └─────────────┘
+     │         │              event      E. Update                        ▲
+ A. Load  C. Save new     │   │          Projection       │               │
+state from   event            │               │                        G. Read
+  events       │          │   │               │           │       Outstanding Todos
+     │         ▼              │               ▼                      Projection
+     │  ┌─────────────┐   │   │        ┌─────────────┐    │               │
+     │  │             │       │        │ Outstanding │                    │
+     └──│ Event Store │───┼───┘        │    Todos    │    │               │
+        │             │                │  Database   │────────────────────┘
+        └─────────────┘   │            │    Table    │    │
+                                       └─────────────┘
+                          │                               │
+
+```
+
 ## Routes
 
 The application exposes a web UI with the following API.
