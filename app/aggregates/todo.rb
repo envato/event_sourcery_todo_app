@@ -3,8 +3,15 @@ module EventSourceryTodoApp
     class Todo
       include EventSourcery::AggregateRoot
 
+      # These apply methods are the hook that this aggregate uses to update
+      # its internal state from events.
+
       apply TodoAdded do |event|
-        @added = true
+        # We track our ID when we are added to we can ensure the same todo isn't
+        # added twice.
+        #
+        # We could save more attributes off the event in here if we needed them.
+        @aggregate_id = event.aggregate_id
       end
 
       apply TodoAmended do |event|
@@ -19,7 +26,7 @@ module EventSourceryTodoApp
       end
 
       def add(payload)
-        raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added
+        raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added?
 
         apply_event(TodoAdded,
           aggregate_id: id,
@@ -27,8 +34,11 @@ module EventSourceryTodoApp
         )
       end
 
+      # The methods below are how this aggregate handles different commands.
+      # Note how they raise new events to indicate the change in state.
+
       def amend(payload)
-        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added
+        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added?
         raise UnprocessableEntity, "Todo #{id.inspect} is complete" if completed
         raise UnprocessableEntity, "Todo #{id.inspect} is abandoned" if abandoned
 
@@ -39,7 +49,7 @@ module EventSourceryTodoApp
       end
 
       def complete(payload)
-        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added
+        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added?
         raise UnprocessableEntity, "Todo #{id.inspect} already complete" if completed
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
@@ -50,7 +60,7 @@ module EventSourceryTodoApp
       end
 
       def abandon(payload)
-        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added
+        raise UnprocessableEntity, "Todo #{id.inspect} does not exist" unless added?
         raise UnprocessableEntity, "Todo #{id.inspect} already complete" if completed
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
@@ -62,7 +72,11 @@ module EventSourceryTodoApp
 
       private
 
-      attr_reader :added, :completed, :abandoned
+      def added?
+        @aggregate_id
+      end
+
+      attr_reader :completed, :abandoned
     end
   end
 end
