@@ -1,24 +1,7 @@
 $LOAD_PATH.unshift '.'
 
-task :environment do
-  require 'config/environment'
-end
-
-desc "Loads the project and starts Pry"
-task console: :environment do
-  require 'pry'
-  Pry.start
-end
-
-
-desc 'Setup Event Stream Processors'
-task setup_processors: :environment do
-  puts "Setting up Event Stream processors"
-
-  event_source = EventSourceryTodoApp.event_source
-  tracker = EventSourceryTodoApp.tracker
-  db_connection = EventSourceryTodoApp.projections_database
-
+# Create our application's ESPs
+def processors(db_connection, tracker)
   [
     EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
       tracker: tracker,
@@ -36,49 +19,44 @@ task setup_processors: :environment do
       tracker: tracker,
       db_connection: db_connection,
     )
-  ].each do |processor|
-    processor.setup
-  end
+  ]
+end
+
+task :environment do
+  require 'config/environment'
+end
+
+desc "Loads the project and starts Pry"
+task console: :environment do
+  require 'pry'
+  Pry.start
+end
+
+
+desc 'Setup Event Stream Processors'
+task setup_processors: :environment do
+  puts "Setting up Event Stream processors"
+
+  processors(EventSourceryTodoApp.projections_database, EventSourceryTodoApp.tracker).each(&:setup)
 end
 
 desc 'Run Event Stream Processors'
 task run_processors: :environment do
   puts "Starting Event Stream processors"
 
-  event_source = EventSourceryTodoApp.event_source
-  tracker = EventSourceryTodoApp.tracker
-  db_connection = EventSourceryTodoApp.projections_database
-
   # Need to disconnect before starting the processors so
   # that the forked processes have their own connection / fork safety.
-  db_connection.disconnect
+  EventSourceryTodoApp.projections_database.disconnect
 
   # Show our ESP logs immediately under Foreman
   $stdout.sync = true
 
-  processors = [
-    EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
-      tracker: tracker,
-      db_connection: db_connection,
-    ),
-    EventSourceryTodoApp::Projections::OutstandingTodos::Projector.new(
-      tracker: tracker,
-      db_connection: db_connection,
-    ),
-    EventSourceryTodoApp::Projections::ScheduledTodos::Projector.new(
-      tracker: tracker,
-      db_connection: db_connection,
-    ),
-    EventSourceryTodoApp::Reactors::TodoCompletedNotifier.new(
-      tracker: tracker,
-      db_connection: db_connection,
-    )
-  ]
+  esps = processors(EventSourceryTodoApp.projections_database, EventSourceryTodoApp.tracker)
 
   # The ESPRunner will fork child processes for each of the ESPs passed to it.
   EventSourcery::EventProcessing::ESPRunner.new(
-    event_processors: processors,
-    event_source: event_source,
+    event_processors: esps,
+    event_source: EventSourceryTodoApp.event_source,
   ).start!
 end
 
