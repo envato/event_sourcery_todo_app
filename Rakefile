@@ -10,6 +10,37 @@ task console: :environment do
   Pry.start
 end
 
+
+desc 'Setup Event Stream Processors'
+task setup_processors: :environment do
+  puts "Setting up Event Stream processors"
+
+  event_source = EventSourceryTodoApp.event_source
+  tracker = EventSourceryTodoApp.tracker
+  db_connection = EventSourceryTodoApp.projections_database
+
+  [
+    EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Projections::OutstandingTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Projections::ScheduledTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Reactors::TodoCompletedNotifier.new(
+      tracker: tracker,
+      db_connection: db_connection,
+    )
+  ].each do |processor|
+    processor.setup
+  end
+end
+
 desc 'Run Event Stream Processors'
 task run_processors: :environment do
   puts "Starting Event Stream processors"
