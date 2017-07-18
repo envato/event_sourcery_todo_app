@@ -20,3 +20,11 @@ echo
 
 bundle exec rake db:create db:migrate
 RACK_ENV=test bundle exec rake db:create db:migrate
+
+
+echo
+echo "--- Setting up event processors"
+echo
+
+bundle exec rake setup_processors
+RACK_ENV=test bundle exec rake setup_processors
