@@ -25,6 +25,9 @@ module EventSourceryTodoApp
         @abandoned = true
       end
 
+      apply StakeholderNotifiedOfTodoCompletion do |event|
+      end
+
       def add(payload)
         raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added?
 
