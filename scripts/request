@@ -111,7 +111,7 @@ end
 command :abandon do |c|
   c.syntax = "#{script_name} abandon [options]"
   c.summary = 'Abandon a Todo item via the Todo web API'
-  c.example 'Abandon a Todo', %Q{#{script_name} abandon -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -a 2017-01-01}
+  c.example 'Abandon a Todo', %Q{#{script_name} abandon -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -D 2017-01-01}
   c.option '-i ID', '--id ID', 'Existing Todo ID'
   c.option '-D ABANDONED_ON', '--abandoned_on ABANDONED_ON', 'Abandoned on'
   c.action do |args, options|
@@ -125,7 +125,7 @@ end
 command :complete do |c|
   c.syntax = "#{script_name} complete [options]"
   c.summary = 'Complete a Todo item via the Todo web API'
-  c.example 'Complete a Todo', %Q{#{script_name} complete -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -a 2017-01-01}
+  c.example 'Complete a Todo', %Q{#{script_name} complete -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -D 2017-01-01}
   c.option '-i ID', '--id ID', 'Existing Todo ID'
   c.option '-D COMPLETED_ON', '--completed_on COMPLETED_ON', 'Completed on'
   c.action do |args, options|
