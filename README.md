@@ -152,7 +152,7 @@ Also note that we are only showing one projection below. The other projectors an
        │Command Handler│                                                  │
        └───────────────┘  │                               │          F. Handle
                │                                                       Query
-     B. Call add todo on  │                               │               │
+     A. Call add todo on  │                               │               │
           aggregate                                                       │
                │          │                               │               │
                ▼                       ┌─────────────┐                    │
@@ -162,7 +162,7 @@ Also note that we are only showing one projection below. The other projectors an
      │  │             │       │        └─────────────┘             │             │
      │  └─────────────┘   │  D. Read          │           │        └─────────────┘
      │         │              event      E. Update                        ▲
- A. Load  C. Save new     │   │          Projection       │               │
+ B. Load  C. Save new     │   │          Projection       │               │
 state from   event            │               │                        G. Read
   events       │          │   │               │           │       Outstanding Todos
      │         ▼              │               ▼                      Projection
