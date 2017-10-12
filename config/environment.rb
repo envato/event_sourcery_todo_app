@@ -37,7 +37,7 @@ module EventSourceryTodoApp
   end
 
   def self.event_source
-    EventSourcery::Postgres.config.event_store
+    EventSourcery::Postgres.config.event_source
   end
 
   def self.tracker
