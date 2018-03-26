@@ -27,9 +27,9 @@ RSpec.configure do |config|
   config.order = :random
   Kernel.srand config.seed
 
-  EventSourcery.configure do |config|
-    config.logger = Logger.new(nil)
-  end
+  # EventSourcery.configure do |config|
+  #   config.logger = Logger.new(nil)
+  # end
 
   config.before do
     DatabaseCleaner.strategy = :truncation

@@ -1,1 +1,1 @@
-StakeholderNotifiedOfTodoCompletion = Class.new(EventSourcery::Event)
+StakeholderNotifiedOfTodoCompletion = Class.new(Eventory::Event)

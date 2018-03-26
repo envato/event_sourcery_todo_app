@@ -1,1 +1,1 @@
-TodoCompleted = Class.new(EventSourcery::Event)
+TodoCompleted = Class.new(Eventory::Event)

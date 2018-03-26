@@ -1,10 +1,10 @@
 module EventSourceryTodoApp
   module Projections
     module ScheduledTodos
-      class Projector
-        include EventSourcery::Postgres::Projector
+      class Projector < Eventory::Projector
+        # include EventSourcery::Postgres::Projector
 
-        projector_name :scheduled_todos
+        # projector_name :scheduled_todos
 
         # Database tables that form the projection.
 
@@ -22,7 +22,7 @@ module EventSourceryTodoApp
         # Event handlers that update the projection in response to different events
         # from the store.
 
-        project TodoAdded do |event|
+        on TodoAdded do |event|
           table.insert(
             todo_id: event.aggregate_id,
             title: event.body['title'],
@@ -32,7 +32,7 @@ module EventSourceryTodoApp
           )
         end
 
-        project TodoAmended do |event|
+        on TodoAmended do |event|
           table.where(
             todo_id: event.aggregate_id,
           ).update(
@@ -40,7 +40,7 @@ module EventSourceryTodoApp
           )
         end
 
-        project TodoCompleted, TodoAbandoned do |event|
+        on TodoCompleted, TodoAbandoned do |event|
           table.where(todo_id: event.aggregate_id).delete
         end
 

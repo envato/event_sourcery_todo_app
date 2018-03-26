@@ -1,1 +1,1 @@
-TodoAbandoned = Class.new(EventSourcery::Event)
+TodoAbandoned = Class.new(Eventory::Event)
