@@ -6,7 +6,7 @@ module EventSourceryTodoApp
 
     def load(type, stream_id)
       events = event_store.read_stream_events(stream_id)
-      type.new(stream_id, events) 
+      type.new(stream_id, events)
     end
 
     private

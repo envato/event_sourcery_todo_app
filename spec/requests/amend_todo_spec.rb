@@ -4,7 +4,7 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when updating an attribute' do
       before do
-        EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id, body: {
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id, body: {
           title: '2000 squats',
           description: 'Leg day.',
           due_date: '2017-07-13',
@@ -46,8 +46,8 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when the Todo is already complete' do
       before do
-        EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
-        EventSourceryTodoApp.event_sink.sink TodoCompleted.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoCompleted.new(aggregate_id: todo_id)
       end
 
       it 'returns unprocessable entity' do
@@ -60,8 +60,8 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when the Todo is already abandoned' do
       before do
-        EventSourceryTodoApp.event_sink.sink TodoAdded.new(aggregate_id: todo_id)
-        EventSourceryTodoApp.event_sink.sink TodoAbandoned.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAbandoned.new(aggregate_id: todo_id)
       end
 
       it 'returns unprocessable entity' do

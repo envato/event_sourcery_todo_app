@@ -68,7 +68,14 @@ end
 EventSourceryTodoApp.configure do |config|
   postgres_port = ENV['BOXEN_POSTGRESQL_PORT'] || 5432
   config.database_url = ENV['DATABASE_URL'] || "postgres://127.0.0.1:#{postgres_port}/event_sourcery_todo_app_#{EventSourceryTodoApp.environment}"
-  config.database = Sequel.connect(config.database_url)
+  Sequel.extension :pg_json
+  Sequel.extension :pg_json_ops
+  db = Sequel.connect(config.database_url)
+  Sequel.extension(:pg_array_ops)
+  db.extension(:pg_array)
+  db.extension(:pg_json)
+  db.logger = Logger.new(STDOUT) if ENV['LOG']
+  config.database = db
 end
 
 # EventSourcery::Postgres.configure do |config|
