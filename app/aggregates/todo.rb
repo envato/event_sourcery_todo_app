@@ -1,31 +1,32 @@
 module EventSourceryTodoApp
   module Aggregates
-    class Todo
-      include EventSourcery::AggregateRoot
+    class Todo < Aggregate
+      # include Eventory::EventHandler
+      # include EventSourcery::AggregateRoot
 
       # These apply methods are the hook that this aggregate uses to update
       # its internal state from events.
 
-      apply TodoAdded do |event|
+      on TodoAdded do |event|
         # We track the ID when a todo is added so we can ensure the same todo isn't
         # added twice.
         #
         # We can save more attributes off the event in here as necessary.
-        @aggregate_id = event.aggregate_id
+        @aggregate_id = event.stream_id
       end
 
-      apply TodoAmended do |event|
+      on TodoAmended do |event|
       end
 
-      apply TodoCompleted do |event|
+      on TodoCompleted do |event|
         @completed = true
       end
 
-      apply TodoAbandoned do |event|
+      on TodoAbandoned do |event|
         @abandoned = true
       end
 
-      apply StakeholderNotifiedOfTodoCompletion do |event|
+      on StakeholderNotifiedOfTodoCompletion do |event|
       end
 
       def add(payload)
@@ -57,7 +58,7 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
         apply_event(TodoCompleted,
-          aggregate_id: id,
+         aggregate_id: id,
           body: payload,
         )
       end

@@ -72,6 +72,7 @@ namespace :db do
 
   desc 'Drop database'
   task drop: :environment do
+    EventSourceryTodoApp.config.database.disconnect
     url = EventSourceryTodoApp.config.database_url
     database_name = File.basename(url)
     database = Sequel.connect URI.join(url, '/template1').to_s

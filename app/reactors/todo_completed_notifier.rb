@@ -1,7 +1,7 @@
 module EventSourceryTodoApp
   module Reactors
-    class TodoCompletedNotifier
-      include EventSourcery::Postgres::Reactor
+    class TodoCompletedNotifier < Eventory::Reactor
+      # include EventSourcery::Postgres::Reactor
 
       SendEmail = ->(params) do
         puts <<~EMAIL
@@ -11,8 +11,8 @@ module EventSourceryTodoApp
         EMAIL
       end
 
-      processor_name :todo_completed_notifier
-      emits_events StakeholderNotifiedOfTodoCompletion
+      # processor_name :todo_completed_notifier
+      # emits_events StakeholderNotifiedOfTodoCompletion
 
       # Reactors often need to persist state so they can track what work they need
       # to do. Here we use a database table.
@@ -27,7 +27,7 @@ module EventSourceryTodoApp
       # Event handlers where we do our work. This can include updating internal,
       # emitting events, and/or calling external systems.
 
-      process TodoAdded do |event|
+      on TodoAdded do |event|
         table.insert(
           todo_id: event.aggregate_id,
           title: event.body['title'],
@@ -35,17 +35,17 @@ module EventSourceryTodoApp
         )
       end
 
-      process TodoAmended do |event|
+      on TodoAmended do |event|
         table.where(todo_id: event.aggregate_id).update(
           event.body.slice('title', 'stakeholder_email'),
         )
       end
 
-      process TodoAbandoned do |event|
+      on TodoAbandoned do |event|
         table.where(todo_id: event.aggregate_id).delete
       end
 
-      process TodoCompleted do |event|
+      on TodoCompleted do |event|
         todo = table.where(todo_id: event.aggregate_id).first
 
         # Here we send an email to the stakeholder and record that fact using

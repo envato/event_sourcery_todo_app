@@ -1,1 +1,1 @@
-TodoAdded = Class.new(EventSourcery::Event)
+TodoAdded = Class.new(Eventory::Event)
