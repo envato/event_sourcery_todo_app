@@ -1,11 +1,13 @@
 require 'app/reactors/todo_completed_notifier'
 
 RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
+  let(:checkpoints) { Eventory::Checkpoints.new(database: EventSourceryTodoApp.config.database) }
+
   subject(:reactor) do
     described_class.new(
-      event_source: EventSourceryTodoApp.event_source,
-      event_sink: EventSourceryTodoApp.event_sink,
-      db_connection: EventSourceryTodoApp.projections_database,
+      event_store: EventSourceryTodoApp.event_store,
+      checkpoints: checkpoints,
+      database: EventSourceryTodoApp.config.database,
     )
   end
 

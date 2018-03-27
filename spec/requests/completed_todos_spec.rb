@@ -36,7 +36,7 @@ RSpec.describe 'completed todos', type: :request do
         }),
       ]
     end
-    let(:checkpoints) { Eventory::Checkpoints.new(databse: EventSourceryTodoApp.config.database) }
+    let(:checkpoints) { Eventory::Checkpoints.new(database: EventSourceryTodoApp.config.database) }
     let(:projector) { 
       EventSourceryTodoApp::Projections::CompletedTodos::Projector.new(
         event_store: EventSourceryTodoApp.event_store,
