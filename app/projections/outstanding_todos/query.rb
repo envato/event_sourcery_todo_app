@@ -4,7 +4,11 @@ module EventSourceryTodoApp
       # Query handler that queries the projection table.
       class Query
         def self.handle
-          EventSourceryTodoApp.projections_database[:query_outstanding_todos].all
+          EventSourceryTodoApp.projections_database[table].all
+        end
+
+        def self.table
+          :outstanding_todos_query_outstanding_todos
         end
       end
     end

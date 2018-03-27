@@ -4,7 +4,9 @@ module EventSourceryTodoApp
       class Projector < Eventory::Projector
         # include EventSourcery::Postgres::Projector
 
-        # projector_name :outstanding_todos
+        def namespace
+          :outstanding_todos
+        end
 
         # Database tables that form the projection.
 
@@ -20,25 +22,25 @@ module EventSourceryTodoApp
         # from the store.
 
         on TodoAdded do |event|
-          table.insert(
-            todo_id: event.aggregate_id,
-            title: event.body['title'],
-            description: event.body['description'],
-            due_date: event.body['due_date'],
-            stakeholder_email: event.body['stakeholder_email'],
+          table(:query_outstanding_todos).insert(
+            todo_id: event.stream_id,
+            title: event.data.body[:title],
+            description: event.data.body[:description],
+            due_date: event.data.body[:due_date],
+            stakeholder_email: event.data.body[:stakeholder_email],
           )
         end
 
         on TodoAmended do |event|
-          table.where(
-            todo_id: event.aggregate_id,
+          table(:query_outstanding_todos).where(
+            todo_id: event.stream_id,
           ).update(
-            event.body.slice('title', 'description', 'due_date', 'stakeholder_email')
+            event.data.body.slice(:title, :description, :due_date, :stakeholder_email)
           )
         end
 
         on TodoCompleted, TodoAbandoned do |event|
-          table.where(todo_id: event.aggregate_id).delete
+          table(:query_outstanding_todos).where(todo_id: event.stream_id).delete
         end
       end
     end
