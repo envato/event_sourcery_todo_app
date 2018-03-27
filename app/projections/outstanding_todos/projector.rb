@@ -2,8 +2,6 @@ module EventSourceryTodoApp
   module Projections
     module OutstandingTodos
       class Projector < Eventory::Projector
-        # include EventSourcery::Postgres::Projector
-
         def namespace
           :outstanding_todos
         end

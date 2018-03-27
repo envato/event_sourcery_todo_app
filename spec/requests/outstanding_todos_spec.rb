@@ -61,7 +61,7 @@ RSpec.describe 'outstanding todos', type: :request do
     }
 
     it 'returns a list of outstanding Todos' do
-      # projector.setup
+      projector.up
 
       recorded_events.each do |event|
         projector.process(event)

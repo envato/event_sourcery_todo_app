@@ -51,7 +51,7 @@ RSpec.describe 'scheduled todos', type: :request do
     let(:projector) { EventSourceryTodoApp::Projections::ScheduledTodos::Projector.new }
 
     it 'returns a list of scheduled Todos' do
-      projector.setup
+      projector.up
 
       events.each do |event|
         projector.process(event)

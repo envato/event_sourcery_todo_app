@@ -8,30 +8,30 @@ RSpec.describe 'completed todos', type: :request do
     let(:todo_id_4) { SecureRandom.uuid }
     let(:events) do
       [
-        TodoAdded.new(aggregate_id: todo_id_1, body: {
+        TodoAdded.new(stream_id: todo_id_1, body: {
           title: "I don't do requests",
         }),
-        TodoAdded.new(aggregate_id: todo_id_2, body: {
+        TodoAdded.new(stream_id: todo_id_2, body: {
           title: "If it's hard to remember, it will be difficult to forget",
           due_date: '2017-06-13',
         }),
-        TodoCompleted.new(aggregate_id: todo_id_1, body: {
+        TodoCompleted.new(stream_id: todo_id_1, body: {
           completed_on: '2017-06-13',
         }),
-        TodoAmended.new(aggregate_id: todo_id_2, body: {
+        TodoAmended.new(stream_id: todo_id_2, body: {
           title: "If it's hard to remember, it...",
           description: "Hmm...",
         }),
-        TodoCompleted.new(aggregate_id: todo_id_2, body: {
+        TodoCompleted.new(stream_id: todo_id_2, body: {
           completed_on: '2017-06-15',
         }),
-        TodoAdded.new(aggregate_id: todo_id_3, body: {
+        TodoAdded.new(stream_id: todo_id_3, body: {
           title: 'Milk is for babies',
         }),
-        TodoAdded.new(aggregate_id: todo_id_4, body: {
+        TodoAdded.new(stream_id: todo_id_4, body: {
           title: 'Your clothes, give them to me, now!',
         }),
-        TodoAbandoned.new(aggregate_id: todo_id_4, body: {
+        TodoAbandoned.new(stream_id: todo_id_4, body: {
           abandoned_on: '2017-06-01',
         }),
       ]
@@ -45,10 +45,27 @@ RSpec.describe 'completed todos', type: :request do
       )
     }
 
-    it 'returns a list of completed Todos' do
-      projector.setup
+    let(:recorded_events) do
+      events.each_with_index.map do |event, i|
+        Eventory::RecordedEvent.new(
+          number: i,
+          id: i,
+          stream_id: event.stream_id,
+          stream_version: i,
+          type: event.class,
+          data: event,
+          recorded_at: Time.now,
+          correlation_id: SecureRandom.uuid,
+          causation_id: SecureRandom.uuid,
+          metadata: nil
+        )
+      end
+    end
 
-      events.each do |event|
+    it 'returns a list of completed Todos' do
+      projector.up
+
+      recorded_events.each do |event|
         projector.process(event)
       end
 
@@ -62,15 +79,15 @@ RSpec.describe 'completed todos', type: :request do
           description: nil,
           due_date: nil,
           stakeholder_email: nil,
-          completed_on: '2017-06-13 00:00:00 UTC',
+          completed_on: '2017-06-13 00:00:00 +1000',
         },
         {
           todo_id: todo_id_2,
           title: "If it's hard to remember, it...",
           description: "Hmm...",
-          due_date: '2017-06-13 00:00:00 UTC',
+          due_date: '2017-06-13 00:00:00 +1000',
           stakeholder_email: nil,
-          completed_on: '2017-06-15 00:00:00 UTC',
+          completed_on: '2017-06-15 00:00:00 +1000',
         },
       ])
     end

@@ -19,7 +19,7 @@ RSpec.describe EventSourceryTodoApp::Reactors::TodoCompletedNotifier do
     let(:stream) { [] }
 
     before do
-      reactor.setup
+      reactor.up
       allow(described_class::SendEmail).to receive(:call)
       allow(DateTime).to receive(:now).and_return(current_date)
       process

@@ -2,9 +2,10 @@ module EventSourceryTodoApp
   module Projections
     module CompletedTodos
       class Projector < Eventory::Projector
-        # include EventSourcery::Postgres::Projector
-
         # projector_name :completed_todos
+        def namespace
+          :completed_todos
+        end
 
         # Database tables that form the projection.
 
@@ -30,39 +31,39 @@ module EventSourceryTodoApp
 
         on TodoAdded do |event|
           table(:query_completed_todos_incomplete_todos).insert(
-            todo_id: event.aggregate_id,
-            title: event.body['title'],
-            description: event.body['description'],
-            due_date: event.body['due_date'],
-            stakeholder_email: event.body['stakeholder_email'],
+            todo_id: event.stream_id,
+            title: event.data.body[:title],
+            description: event.data.body[:description],
+            due_date: event.data.body[:due_date],
+            stakeholder_email: event.data.body[:stakeholder_email],
           )
         end
 
         on TodoAmended do |event|
           table(:query_completed_todos_incomplete_todos).where(
-            todo_id: event.aggregate_id,
+            todo_id: event.stream_id,
           ).update(
-            event.body.slice('title', 'description', 'due_date', 'stakeholder_email')
+            event.data.body.slice(:title, :description, :due_date, :stakeholder_email)
           )
         end
 
         on TodoAbandoned do |event|
-          table(:query_completed_todos_incomplete_todos).where(todo_id: event.aggregate_id).delete
+          table(:query_completed_todos_incomplete_todos).where(todo_id: event.stream_id).delete
         end
 
         on TodoCompleted do |event|
-          todo = table(:query_completed_todos_incomplete_todos).where(todo_id: event.aggregate_id).first
+          todo = table(:query_completed_todos_incomplete_todos).where(todo_id: event.stream_id).first
 
           table(:query_completed_todos).insert(
-            todo_id: event.aggregate_id,
+            todo_id: event.stream_id,
             title: todo[:title],
             description: todo[:description],
             due_date: todo[:due_date],
             stakeholder_email: todo[:stakeholder_email],
-            completed_on: event.body['completed_on'],
+            completed_on: event.data.body[:completed_on],
           )
 
-          table(:query_completed_todos_incomplete_todos).where(todo_id: event.aggregate_id).delete
+          table(:query_completed_todos_incomplete_todos).where(todo_id: event.stream_id).delete
         end
       end
     end
