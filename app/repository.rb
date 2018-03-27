@@ -9,6 +9,18 @@ module EventSourceryTodoApp
       type.new(stream_id, events)
     end
 
+    def save(aggregate)
+      new_events = aggregate.changes
+      if new_events.any?
+        event_store.append(
+          new_events.first.stream_id, 
+          new_events,
+          expected_version: aggregate.version - new_events.count
+        )
+      end
+      aggregate.clear_changes
+    end
+
     private
 
     attr_reader :event_store

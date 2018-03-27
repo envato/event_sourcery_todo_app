@@ -4,7 +4,7 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when updating an attribute' do
       before do
-        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id, body: {
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(stream_id: todo_id, body: {
           title: '2000 squats',
           description: 'Leg day.',
           due_date: '2017-07-13',
@@ -19,7 +19,7 @@ RSpec.describe 'amend todo', type: :request do
 
         expect(last_response.status).to be 200
         expect(last_event(todo_id)).to be_a TodoAmended
-        expect(last_event(todo_id).aggregate_id).to eq todo_id
+        expect(last_event(todo_id).stream_id).to eq todo_id
         expect(last_event(todo_id).body).to eq(
           'description' => 'It IS leg day!',
         )
@@ -46,8 +46,8 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when the Todo is already complete' do
       before do
-        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id)
-        EventSourceryTodoApp.event_store.append todo_id, TodoCompleted.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(stream_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoCompleted.new(stream_id: todo_id)
       end
 
       it 'returns unprocessable entity' do
@@ -60,8 +60,8 @@ RSpec.describe 'amend todo', type: :request do
 
     context 'when the Todo is already abandoned' do
       before do
-        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(aggregate_id: todo_id)
-        EventSourceryTodoApp.event_store.append todo_id, TodoAbandoned.new(aggregate_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAdded.new(stream_id: todo_id)
+        EventSourceryTodoApp.event_store.append todo_id, TodoAbandoned.new(stream_id: todo_id)
       end
 
       it 'returns unprocessable entity' do

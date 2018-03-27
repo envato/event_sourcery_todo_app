@@ -33,7 +33,7 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added?
 
         apply_event(TodoAdded,
-          aggregate_id: id,
+          stream_id: id,
           body: payload,
         )
       end
@@ -47,7 +47,7 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} is abandoned" if abandoned
 
         apply_event(TodoAmended,
-          aggregate_id: id,
+          stream_id: id,
           body: payload,
         )
       end
@@ -58,7 +58,7 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
         apply_event(TodoCompleted,
-         aggregate_id: id,
+          stream_id: id,
           body: payload,
         )
       end
@@ -69,7 +69,7 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
         apply_event(TodoAbandoned,
-          aggregate_id: id,
+          stream_id: id,
           body: payload,
         )
       end

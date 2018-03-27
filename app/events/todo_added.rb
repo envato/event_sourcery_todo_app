@@ -1,1 +1,3 @@
-TodoAdded = Class.new(Eventory::Event)
+class TodoAdded < Eventory::Event
+  attribute :stream_id
+end

@@ -53,8 +53,6 @@ module EventSourceryTodoApp
     end
 
     put '/todo/:todo_id' do
-require "byebug"
-byebug
       command = Commands::Todo::Amend::Command.build(json_params)
       Commands::Todo::Amend::CommandHandler.new.handle(command)
       status 200

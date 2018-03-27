@@ -3,6 +3,7 @@ ENV['RACK_ENV'] = 'test'
 require 'rack/test'
 require 'securerandom'
 require 'database_cleaner'
+require 'byebug'
 
 $LOAD_PATH << '.'
 

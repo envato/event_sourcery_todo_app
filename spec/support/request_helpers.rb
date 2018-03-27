@@ -7,7 +7,9 @@ module RequestHelpers
 
   def last_event(aggregate_id)
     EventSourceryTodoApp.event_store
-      .get_events_for_aggregate_id(aggregate_id).last
+      .read_stream_events(aggregate_id)
+      .last
+      .data
   end
 
   def post_json(uri, body_hash={})

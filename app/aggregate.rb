@@ -2,12 +2,19 @@ module EventSourceryTodoApp
   class Aggregate
     include Eventory::EventHandler
 
+    attr_reader :changes
+    attr_reader :version
+
     def initialize(id, events)
       @id = id.to_str
-      # @version = 0
+      @version = 0
       # @on_unknown_event = on_unknown_event
       @changes = []
       load_history(events)
+    end
+
+    def clear_changes
+      @changes = []
     end
 
     private
@@ -19,19 +26,28 @@ module EventSourceryTodoApp
     end
 
     def apply_event(event_class, options = {})
-      event = event_class.new(**options.merge(aggregate_id: id))
-      handle(event)
+      event = event_class.new(**options.merge(stream_id: id))
+      mutate_state_from(event)
       @changes << event
     end
 
     def handle_event(recorded_event)
       # @_current_event = recorded_event
       event = recorded_event.data
+      mutate_state_from(event)
+    # ensure
+    #   @_current_event = nil
+    end
+
+    def mutate_state_from(event)
       self.class.event_handlers[event.class].each do |handler|
         instance_exec(event, &handler)
       end
-    # ensure
-    #   @_current_event = nil
+      increment_version
+    end
+
+    def increment_version
+      @version += 1
     end
   end
 end
