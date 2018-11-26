@@ -66,7 +66,7 @@ EventSourceryTodoApp.configure do |config|
 end
 
 EventSourcery::Postgres.configure do |config|
-  database = Sequel.connect(EventSourceryTodoApp.config.database_url)
+  database = Sequel.connect(EventSourceryTodoApp.config.database_url, test: false)
 
   # NOTE: Often we choose to split our events and projections into separate
   # databases. For the purposes of this example we'll use one.
