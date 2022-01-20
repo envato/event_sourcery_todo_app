@@ -14,6 +14,7 @@ module EventSourceryTodoApp
           def initialize(params)
             @payload = params.slice(
               :todo_id,
+              :todo_list_id,
               :title,
               :description,
               :due_date,
