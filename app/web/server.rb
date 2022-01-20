@@ -5,6 +5,8 @@ require 'app/commands/todo/abandon'
 require 'app/commands/todo/add'
 require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
+require 'app/commands/todo_list/create'
+
 require 'app/projections/completed_todos/query'
 require 'app/projections/outstanding_todos/query'
 require 'app/projections/scheduled_todos/query'
@@ -93,9 +95,10 @@ module EventSourceryTodoApp
       status 200
     end
 
-    post '/todolist/:todolist_id' do
-      command = Commands::ToDoList::Create::Command.build(json_params)
-      Commands::ToDoList::Create::CommandHandler.new.handle(command)
+    post '/todo_list/:todo_list_id' do
+      # p json_params
+      command = Commands::TodoList::Create::Command.build(json_params)
+      Commands::TodoList::Create::CommandHandler.new.handle(command)
       status 201
     end
   end

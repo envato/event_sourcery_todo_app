@@ -168,7 +168,7 @@ command :uuid do |c|
   end
 end
 
-command :todolistcreate do |c|
+command :todo_list_create do |c|
   c.syntax = "#{script_name} add [options]"
   c.summary = 'Add a Todo list item via the Todo web API'
   c.example 'Add a Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task"}
@@ -177,14 +177,14 @@ command :todolistcreate do |c|
   c.option '-i ID', '--id ID', 'Todo ID'
   c.option '-t TITLE', '--title TITLE', 'Title'
   c.action do |args, options|
-    todolist_id = options.id
-    unless todolist_id
+    todo_list_id = options.id
+    unless todo_list_id
       $stderr.puts "Error: you must specify a Todo ID for the new Todo"
       $stderr.puts "You can generate one using `#{script_name} uuid`."
       exit 1
     end
     payload = slice_and_compact(options.default, :title)
-    puts "Adding todo [#{todolist_id}]: #{payload}"
-    Request.call(:post, "/todolist/#{todolist_id}", payload)
+    puts "Adding todo [#{todo_list_id}]: #{payload}"
+    Request.call(:post, "/todo_list/#{todo_list_id}", payload)
   end
 end

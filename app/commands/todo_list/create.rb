@@ -1,8 +1,8 @@
-require 'app/aggregate/todolist'
+require 'app/aggregates/todo_list'
 
 module EventSourceryTodoApp
     module Commands
-        module ToDoList
+        module TodoList
             module Create
                 class Command
                     attr_reader :payload, :aggregate_id
@@ -13,11 +13,11 @@ module EventSourceryTodoApp
 
                     def initialize(params)
                         @payload = params.slice(
-                            :todolist_id
-                            :title,
+                            :todo_list_id,
+                            :title
                         )
 
-                        @aggregate_id = payload.delete(:todolist_id)
+                        @aggregate_id = payload.delete(:todo_list_id)
                     end
 
                     def validate
@@ -30,7 +30,7 @@ module EventSourceryTodoApp
                     end
                     
                     def handle(command)
-                        aggregate = repository.load(Aggregates::ToDoList, command.aggregrate_id)
+                        aggregate = repository.load(Aggregates::TodoList, command.aggregate_id)
                         aggregate.create(command.payload)
                         repository.save(aggregate)
                     end
