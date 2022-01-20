@@ -35,7 +35,7 @@ module EventSourceryTodoApp
     end
 
     def json_params
-      # Coerce this into a symbolised Hash so Sintra data structures
+      # Coerce this into a symbolised Hash so Sinatra data structures
       # don't leak into the command layer.
       Hash[
         params.merge(
@@ -91,6 +91,12 @@ module EventSourceryTodoApp
         EventSourceryTodoApp::Projections::CompletedTodos::Query.handle
       )
       status 200
+    end
+
+    post '/todolist/:todolist_id' do
+      command = Commands::ToDoList::Create::Command.build(json_params)
+      Commands::ToDoList::Create::CommandHandler.new.handle(command)
+      status 201
     end
   end
 end

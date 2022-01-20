@@ -1,0 +1,1 @@
+ToDoListCreated = Class.new(EventSourceryTodoApp::Event)

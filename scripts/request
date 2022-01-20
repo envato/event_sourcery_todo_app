@@ -61,7 +61,7 @@ program :description, 'Interact with the Event Sourcery Todo Example App.'
 
 never_trace!
 
-script_name = $0
+script_name = $0    #ruby shortcut, file name
 
 command :add do |c|
   c.syntax = "#{script_name} add [options]"
@@ -165,5 +165,26 @@ command :uuid do |c|
   c.example 'Generate a UUID', "#{script_name} uuid"
   c.action do |args, options|
     puts SecureRandom.uuid
+  end
+end
+
+command :todolistcreate do |c|
+  c.syntax = "#{script_name} add [options]"
+  c.summary = 'Add a Todo list item via the Todo web API'
+  c.example 'Add a Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task"}
+  c.example 'Add a more complex Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
+  c.example 'Add a Todo', %Q{#{script_name} add -i $(#{script_name} uuid) -t "My task"}
+  c.option '-i ID', '--id ID', 'Todo ID'
+  c.option '-t TITLE', '--title TITLE', 'Title'
+  c.action do |args, options|
+    todolist_id = options.id
+    unless todolist_id
+      $stderr.puts "Error: you must specify a Todo ID for the new Todo"
+      $stderr.puts "You can generate one using `#{script_name} uuid`."
+      exit 1
+    end
+    payload = slice_and_compact(options.default, :title)
+    puts "Adding todo [#{todolist_id}]: #{payload}"
+    Request.call(:post, "/todolist/#{todolist_id}", payload)
   end
 end
