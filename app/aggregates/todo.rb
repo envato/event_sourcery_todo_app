@@ -11,6 +11,7 @@ module EventSourceryTodoApp
         # added twice.
         #
         # We can save more attributes off the event in here as necessary.
+        puts "Now adding #{event}"
         @aggregate_id = event.aggregate_id
       end
 

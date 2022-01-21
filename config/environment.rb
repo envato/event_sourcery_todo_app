@@ -12,7 +12,7 @@ require 'app/errors'
 require 'app/projections/completed_todos/projector'
 require 'app/projections/outstanding_todos/projector'
 require 'app/projections/scheduled_todos/projector'
-require 'app/projections/list_todos/projector'
+require 'app/projections/todo_lists/projector'
 require 'app/reactors/todo_completed_notifier'
 
 # Configure EventSourcery and our Postgres event store.
