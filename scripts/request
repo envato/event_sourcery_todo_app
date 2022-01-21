@@ -185,7 +185,7 @@ command :todo_list_create do |c|
       exit 1
     end
     payload = slice_and_compact(options.default, :title)
-    puts "Adding todo [#{todo_list_id}]: #{payload}"
+    puts "Adding todo list [#{todo_list_id}]: #{payload}"
     Request.call(:post, "/todo_list/#{todo_list_id}", payload)
   end
 end
