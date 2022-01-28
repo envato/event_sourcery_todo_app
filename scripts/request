@@ -70,7 +70,7 @@ command :add do |c|
   c.example 'Add a more complex Todo', %Q{#{script_name} add -i 0b341422-c516-4ee4-8f3e-ef1992dfff32 -t "My task" -d "My task description" -D 2017-01-01 -s stakeholder@example.com}
   c.example 'Add a Todo', %Q{#{script_name} add -i $(#{script_name} uuid) -t "My task"}
   c.option '-i ID', '--id ID', 'Todo ID'
-  c.option '-l LIST_ID', '--list_id LIST_ID', 'List ID'
+  c.option '-l TODO_LIST_ID', '--todo_list_id LIST_ID', 'List ID'
   c.option '-t TITLE', '--title TITLE', 'Title'
   c.option '-d DESCRIPTION', '--description DESCRIPTION', 'Description'
   c.option '-D DUE_DATE', '--due_date DUE_DATE', 'Due date'
@@ -82,7 +82,7 @@ command :add do |c|
       $stderr.puts "You can generate one using `#{script_name} uuid`."
       exit 1
     end
-    payload = slice_and_compact(options.default, :todo_list_id, :title, :description, :due_date, :stakeholder_email)
+    payload = slice_and_compact(options.default, :id, :todo_list_id, :title, :description, :due_date, :stakeholder_email)
     puts "Adding todo [#{todo_id}]: #{payload}"
     Request.call(:post, "/todo/#{todo_id}", payload)
   end

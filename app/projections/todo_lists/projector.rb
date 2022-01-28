@@ -28,7 +28,6 @@ module EventSourceryTodoApp
 
         project TodoAdded do |event|
           todo_list_row = table(:query_todo_list_title).where(todo_list_id: event.body['todo_list_id']).first || {title: 'unknown'}
-
           table(:query_todo_lists).insert(
             todo_id: event.aggregate_id,
             todo_list_id: event.body['todo_list_id'],
