@@ -66,7 +66,14 @@ namespace :db do
     url = EventSourceryTodoApp.config.database_url
     database_name = File.basename(url)
     database = Sequel.connect URI.join(url, '/template1').to_s
-    database.run("CREATE DATABASE #{database_name}")
+    database.run(<<~DB_QUERY)
+      DROP DATABASE IF EXISTS #{database_name};
+    DB_QUERY
+
+    database.run(<<~DB_QUERY)
+      CREATE DATABASE #{database_name};
+    DB_QUERY
+
     database.disconnect
   end
 
