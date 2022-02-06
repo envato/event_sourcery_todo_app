@@ -12,6 +12,18 @@ This application is intended to illustrate concepts in EventSourcery, how they r
 
 Ensure you have Postgres and Ruby 2.2 or higher installed.
 
+First you need to install the correct ruby version to work with:
+
+```sh
+$ rbenv install
+```
+
+Then make sure you have postgresql running in the background:
+
+```sh
+$ brew services restart postgresql
+```
+
 Then run the setup script.
 
 ```sh
