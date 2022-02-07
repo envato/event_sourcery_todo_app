@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if ! type -t "bundle" > /dev/null; then
+  echo
+  echo "--- Installing Bundler"
+  echo
+
+  gem install 'bundler:$(tail -1 Gemfile.lock | tr -d '[:space:]')'
+fi
+
 if ! type -t "foreman" > /dev/null; then
   echo
   echo "--- Installing Foreman"
