@@ -1,0 +1,1 @@
+TodoMoveup = Class.new(EventSourcery::Event)

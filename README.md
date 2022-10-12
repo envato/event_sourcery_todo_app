@@ -59,6 +59,9 @@ $ ./scripts/request complete -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-
 # Abandon
 $ ./scripts/request abandon -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 -D 2017-01-01
 
+# Move up
+$ ./scripts/request moveup -i aac35923-39b4-4c39-ad5d-f79d67bb2fb2 
+
 # List
 $ ./scripts/request list -l outstanding
 $ ./scripts/request list -l scheduled
