@@ -19,7 +19,7 @@ def processors(db_connection, tracker)
       tracker: tracker,
       db_connection: db_connection,
     ),
-    EventSourceryTodoApp::Reactors::MovedupTodos::Projector.new(
+    EventSourceryTodoApp::Projections::MovedupTodos::Projector.new(
       tracker: tracker,
       db_connection: db_connection,
     )
