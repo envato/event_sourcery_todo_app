@@ -18,6 +18,10 @@ def processors(db_connection, tracker)
     EventSourceryTodoApp::Reactors::TodoCompletedNotifier.new(
       tracker: tracker,
       db_connection: db_connection,
+    ),
+    EventSourceryTodoApp::Reactors::MovedupTodos::Projector.new(
+      tracker: tracker,
+      db_connection: db_connection,
     )
   ]
 end

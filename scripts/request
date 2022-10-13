@@ -158,6 +158,7 @@ command :list do |c|
     'outstanding',
     'scheduled',
     'completed',
+    'movedup'
   ]
 
   c.syntax = "#{script_name} list [options]"

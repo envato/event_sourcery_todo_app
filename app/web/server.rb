@@ -9,6 +9,8 @@ require 'app/commands/todo/moveup'
 require 'app/projections/completed_todos/query'
 require 'app/projections/outstanding_todos/query'
 require 'app/projections/scheduled_todos/query'
+require 'app/projections/movedup_todos/query'
+
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
@@ -96,6 +98,13 @@ module EventSourceryTodoApp
     get '/todos/completed' do
       body JSON.pretty_generate(
         EventSourceryTodoApp::Projections::CompletedTodos::Query.handle
+      )
+      status 200
+    end
+
+    get '/todos/movedup' do
+      body JSON.pretty_generate(
+        EventSourceryTodoApp::Projections::MovedupTodos::Query.handle
       )
       status 200
     end
