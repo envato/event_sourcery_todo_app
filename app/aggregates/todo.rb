@@ -28,6 +28,9 @@ module EventSourceryTodoApp
       apply StakeholderNotifiedOfTodoCompletion do |event|
       end
 
+      apply TodoMoveup do |event|
+      end
+
       def add(payload)
         raise UnprocessableEntity, "Todo #{id.inspect} already exists" if added?
 
@@ -68,6 +71,13 @@ module EventSourceryTodoApp
         raise UnprocessableEntity, "Todo #{id.inspect} already abandoned" if abandoned
 
         apply_event(TodoAbandoned,
+          aggregate_id: id,
+          body: payload,
+        )
+      end
+
+      def moveup(payload)
+        apply_event(TodoMoveup,
           aggregate_id: id,
           body: payload,
         )

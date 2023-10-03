@@ -6,11 +6,13 @@ require 'app/events/todo_abandoned'
 require 'app/events/todo_added'
 require 'app/events/todo_amended'
 require 'app/events/todo_completed'
+require 'app/events/todo_moveup'
 require 'app/events/stakeholder_notified_of_todo_completion'
 require 'app/errors'
 require 'app/projections/completed_todos/projector'
 require 'app/projections/outstanding_todos/projector'
 require 'app/projections/scheduled_todos/projector'
+require 'app/projections/movedup_todos/projector'
 require 'app/reactors/todo_completed_notifier'
 
 # Configure EventSourcery and our Postgres event store.

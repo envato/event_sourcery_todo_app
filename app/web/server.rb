@@ -5,9 +5,12 @@ require 'app/commands/todo/abandon'
 require 'app/commands/todo/add'
 require 'app/commands/todo/amend'
 require 'app/commands/todo/complete'
+require 'app/commands/todo/moveup'
 require 'app/projections/completed_todos/query'
 require 'app/projections/outstanding_todos/query'
 require 'app/projections/scheduled_todos/query'
+require 'app/projections/movedup_todos/query'
+
 
 module EventSourceryTodoApp
   class Server < Sinatra::Base
@@ -70,6 +73,12 @@ module EventSourceryTodoApp
       status 200
     end
 
+    put '/todo/:todo_id/moveup' do
+      command = Commands::Todo::Moveup::Command.build(json_params)
+      Commands::Todo::Moveup::CommandHandler.new.handle(command)
+      status 200
+    end
+
     # Queries
 
     get '/todos/outstanding' do
@@ -89,6 +98,13 @@ module EventSourceryTodoApp
     get '/todos/completed' do
       body JSON.pretty_generate(
         EventSourceryTodoApp::Projections::CompletedTodos::Query.handle
+      )
+      status 200
+    end
+
+    get '/todos/movedup' do
+      body JSON.pretty_generate(
+        EventSourceryTodoApp::Projections::MovedupTodos::Query.handle
       )
       status 200
     end
