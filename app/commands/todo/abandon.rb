@@ -7,8 +7,8 @@ module EventSourceryTodoApp
         class Command
           attr_reader :payload, :aggregate_id
 
-          def self.build(**args)
-            new(**args).tap(&:validate)
+          def self.build(params)
+            new(params).tap(&:validate)
           end
 
           def initialize(params)
