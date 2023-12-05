@@ -1,7 +1,5 @@
 # Event Sourcery Todo Example App
 
-[![Build Status](https://travis-ci.org/envato/event_sourcery_todo_app.svg?branch=master)](https://travis-ci.org/envato/event_sourcery_todo_app)
-
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 An example event sourced/CQRS web application built using [EventSourcery](https://github.com/envato/event_sourcery) and its [Postgres event store implementation](https://github.com/envato/event_sourcery-postgres).
