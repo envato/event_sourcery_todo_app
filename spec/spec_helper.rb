@@ -2,7 +2,7 @@ ENV['RACK_ENV'] = 'test'
 
 require 'rack/test'
 require 'securerandom'
-require 'database_cleaner'
+require 'database_cleaner/sequel'
 
 $LOAD_PATH << '.'
 
@@ -31,8 +31,13 @@ RSpec.configure do |config|
     config.logger = Logger.new(nil)
   end
 
-  config.before do
+  config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.clean
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 end
