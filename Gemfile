@@ -16,7 +16,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec'
   gem 'rack-test'
-  gem 'database_cleaner'
+  gem 'database_cleaner-sequel'
   gem 'shotgun', git: 'https://github.com/delonnewman/shotgun.git'
   gem 'commander'
   gem 'better_errors'

@@ -16,7 +16,10 @@ GEM
     coderay (1.1.3)
     commander (4.5.2)
       highline (~> 2.0.0)
-    database_cleaner (1.8.5)
+    database_cleaner-core (2.0.1)
+    database_cleaner-sequel (2.0.2)
+      database_cleaner-core (~> 2.0.0)
+      sequel
     diff-lcs (1.4.2)
     erubi (1.10.0)
     event_sourcery (0.24.0)
@@ -67,12 +70,16 @@ GEM
     tilt (2.3.0)
 
 PLATFORMS
+  aarch64-linux
+  arm64-darwin
+  ruby
+  x86_64-darwin
   x86_64-linux
 
 DEPENDENCIES
   better_errors
   commander
-  database_cleaner
+  database_cleaner-sequel
   event_sourcery
   event_sourcery-postgres
   pg (= 1.5.4)
