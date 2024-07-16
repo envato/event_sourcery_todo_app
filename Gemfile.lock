@@ -43,7 +43,7 @@ GEM
       pry (>= 0.13, < 0.15)
     puma (6.4.2)
       nio4r (~> 2.0)
-    rack (3.1.4)
+    rack (3.1.7)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
@@ -67,7 +67,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
-    sequel (5.81.0)
+    sequel (5.82.0)
       bigdecimal
     sinatra (4.0.0)
       mustermann (~> 3.0)
