@@ -30,7 +30,7 @@ GEM
       pg
       sequel (>= 4.38)
     highline (3.0.1)
-    logger (1.6.4)
+    logger (1.6.5)
     method_source (1.1.0)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
@@ -42,14 +42,15 @@ GEM
     pry-byebug (3.10.1)
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
-    puma (6.5.0)
+    puma (6.6.0)
       nio4r (~> 2.0)
-    rack (3.1.8)
+    rack (3.1.9)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
-    rack-session (2.0.0)
+    rack-session (2.1.0)
+      base64 (>= 0.1.0)
       rack (>= 3.0.0)
     rack-test (2.2.0)
       rack (>= 1.3)
@@ -69,7 +70,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.2)
     ruby2_keywords (0.0.5)
-    sequel (5.87.0)
+    sequel (5.88.0)
       bigdecimal
     sinatra (4.1.1)
       logger (>= 1.6.0)
@@ -78,7 +79,7 @@ GEM
       rack-protection (= 4.1.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    tilt (2.5.0)
+    tilt (2.6.0)
 
 PLATFORMS
   aarch64-linux
