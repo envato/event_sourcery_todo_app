@@ -8,7 +8,7 @@ This application is intended to illustrate concepts in EventSourcery, how they r
 
 ## Get started
 
-Ensure you have Postgres and Ruby 2.2 or higher installed.
+Ensure you have Postgres and Ruby 3.1 or higher installed.
 
 First you need to install the correct ruby version to work with:
 
