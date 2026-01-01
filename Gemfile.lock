@@ -13,7 +13,7 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     byebug (12.0.0)
     coderay (1.1.3)
     commander (5.0.0)
@@ -24,8 +24,9 @@ GEM
       sequel
     diff-lcs (1.6.2)
     erubi (1.13.1)
-    event_sourcery (1.0.0)
-    event_sourcery-postgres (0.9.1)
+    event_sourcery (1.0.3)
+      logger
+    event_sourcery-postgres (1.0.0)
       event_sourcery (>= 0.14.0)
       pg
       sequel (>= 4.38)
@@ -55,7 +56,7 @@ GEM
     rack-test (2.2.0)
       rack (>= 1.3)
     rake (13.3.1)
-    rouge (4.6.1)
+    rouge (4.7.0)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -70,7 +71,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.6)
     ruby2_keywords (0.0.5)
-    sequel (5.98.0)
+    sequel (5.99.0)
       bigdecimal
     sinatra (4.2.1)
       logger (>= 1.6.0)
